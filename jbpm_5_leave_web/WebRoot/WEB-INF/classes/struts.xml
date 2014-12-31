@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+     <constant name="struts.objectFactory" value="sdc" />   
+     <constant name="struts.action.excludePattern" value="/messagebroker/.*,/FileDownloadServlet,/FileUploadServlet,/FileUploadOverToOpenServlet" /> 
+    
+    <!-- 全局 -->
+	<include file="strutsGlobal.xml"></include>
+    
+    <!-- 前台访问-->
+	<include file="strutsWeb.xml"></include>
+    
+</struts>

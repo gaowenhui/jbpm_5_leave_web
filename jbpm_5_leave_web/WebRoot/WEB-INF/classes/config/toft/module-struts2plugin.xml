@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<components namespace="struts2plugin">
+		
+	<component id="strutsObjectFactory" class="com.toft.core3.web.mvc.struts2.SdcObjectFactory"></component>
+	
+</components>

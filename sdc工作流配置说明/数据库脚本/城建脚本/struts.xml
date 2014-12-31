@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <constant name="struts.objectFactory" value="sdc" /> 
+    <constant name="struts.action.excludePattern" value="/messagebroker/.*" /> 
+    <include file="struts-default.xml"></include>
+    <!-- set action config files -->
+
+<include file="com/iss/icf/hr/emp/config/HrCertificate-action.xml"/>
+<include file="com/iss/icf/hr/emp/config/HrEducation-action.xml"/>
+<include file="com/iss/icf/hr/emp/config/HrEmpDutyOrg-action.xml"/>
+<include file="com/iss/icf/hr/emp/config/HrEmployee-action.xml"/>
+<include file="com/iss/icf/hr/emp/config/HrForeignlanguage-action.xml"/>
+<include file="com/iss/icf/hr/emp/config/HrWorkExperience-action.xml"/>
+<include file="com/iss/icf/hr/learn/config/HrLearnEffect-action.xml"/>
+<include file="com/iss/icf/hr/learn/config/HrLearnImplement-action.xml"/>
+<include file="com/iss/icf/hr/learn/config/HrLearnNeeds-action.xml"/>
+<include file="com/iss/icf/hr/leave/config/HrAskleave-action.xml"/>
+<include file="com/iss/icf/hr/leave/config/HrLeave-action.xml"/>
+<include file="com/iss/icf/hr/organ/config/HrDuty-action.xml"/>
+<include file="com/iss/icf/hr/organ/config/HrOrg-action.xml"/>
+<include file="com/iss/icf/hr/learn/config/HrLearnPlan-action.xml"/> 
+<include file="com/iss/icf/hr/recruit/config/HrRecruitReg-action.xml"/>
+<include file="com/iss/icf/hr/recruit/config/HrRecrplanApplform-action.xml"/>
+<include file="com/iss/icf/hr/recruit/config/HrEmployAssessment-action.xml"/>
+<include file="com/iss/icf/hr/salary/config/HrSalarySet-action.xml"/>
+<include file="com/iss/icf/hr/salary/config/HrSalaryPay-action.xml"/>
+<include file="com/iss/icf/oa/auto/config/OaAutoMove-action.xml"/>
+<include file="com/iss/icf/oa/auto/config/OaAutoReg-action.xml"/>
+<include file="com/iss/icf/oa/auto/config/OaAutoServicing-action.xml"/>
+<include file="com/iss/icf/oa/auto/config/OaAutoUseApply-action.xml"/>
+<include file="com/iss/icf/oa/meeting/config/OaMeetingRecord-action.xml"/>
+<include file="com/iss/icf/oa/meeting/config/OaMeetingReq-action.xml"/>
+<include file="com/iss/icf/oa/meeting/config/OaMeetingRoom-action.xml"/>
+<include file="com/iss/icf/oa/office/config/OaPurchaseApply-action.xml"/>
+<include file="com/iss/icf/oa/office/config/OaPurchaseApplyDetail-action.xml"/>
+<include file="com/iss/icf/oa/office/config/OaUseApply-action.xml"/>
+<include file="com/iss/icf/oa/office/config/OaStorageReg-action.xml"/>
+
+<include file="com/iss/icf/res/resource/config/ResEquipment-action.xml"/>
+<include file="com/iss/icf/res/resource/config/ResEquipmentDetail-action.xml"/>
+<include file="com/iss/icf/res/resource/config/ResMaterial-action.xml"/>
+<include file="com/iss/icf/res/resource/config/ResMaterialDetail-action.xml"/>
+<include file="com/iss/icf/res/resource/config/ResOfficesupplies-action.xml"/>
+<include file="com/iss/icf/res/resource/config/ResOfficesuppliesDetail-action.xml"/>
+<include file="com/iss/icf/res/subsupplier/config/ResSubsupplierInfo-action.xml"/>
+<include file="com/iss/icf/res/subsupplier/config/ResSubsupplierReview-action.xml"/>
+ <include file="com/iss/icf/system/base/config/BaseCodehelp-action.xml"/><include file="com/iss/icf/system/base/config/BaseCompanyicon-action.xml"/><include file="com/iss/icf/system/base/config/BaseGeneralconfig-action.xml"/><include file="com/iss/icf/system/base/config/BaseGenerictempconf-action.xml"/><include file="com/iss/icf/system/base/config/BasePeriod-action.xml"/><include file="com/iss/icf/system/base/config/BasePortletinfoset-action.xml"/><include file="com/iss/icf/system/base/config/BaseProcesstempConfig-action.xml"/><include file="com/iss/icf/system/base/config/BaseUnitmeasure-action.xml"/><include file="com/iss/icf/system/base/config/Sysbasecontrolmode-action.xml"/><include file="com/iss/icf/system/base/config/SysBaseData-action.xml"/><include file="com/iss/icf/system/base/config/SysBaseDataSort-action.xml"/><include file="com/iss/icf/system/base/config/SysCompany-action.xml"/><include file="com/iss/icf/system/base/config/Syscontroldataset-action.xml"/><include file="com/iss/icf/system/base/config/Syscontrolfuncset-action.xml"/><include file="com/iss/icf/system/base/config/SysDataGroup-action.xml"/><include file="com/iss/icf/system/base/config/SysDataGroupItem-action.xml"/><include file="com/iss/icf/system/base/config/SysDataObject-action.xml"/><include file="com/iss/icf/system/base/config/SysDataType-action.xml"/><include file="com/iss/icf/system/base/config/SysFunPurview-action.xml"/><include file="com/iss/icf/system/base/config/Sysgenapermissionset-action.xml"/><include file="com/iss/icf/system/base/config/Sysgloapermissionset-action.xml"/><include file="com/iss/icf/system/base/config/SysOrgDutyRole-action.xml"/><include file="com/iss/icf/system/base/config/SysRdutyGroup-action.xml"/><include file="com/iss/icf/system/base/config/SysRmenuGroup-action.xml"/><include file="com/iss/icf/system/base/config/SysRole-action.xml"/><include file="com/iss/icf/system/base/config/SysRoleFunpurview-action.xml"/><include file="com/iss/icf/system/base/config/SysRorgDutyRole-action.xml"/><include file="com/iss/icf/system/base/config/SysRroleFunpurview-action.xml"/><include file="com/iss/icf/system/base/config/SysRunLogs-action.xml"/><include file="com/iss/icf/system/base/config/SysUserAccount-action.xml"/>
+
+<!-- 公用弹出窗 -->
+<include file="com/iss/icf/comm/popur/config/pubPopur-action.xml"/>
+<include file="com/iss/icf/comm/popur/config/HrOrgEmp-action.xml"/>
+<include file="com/iss/icf/demo/tree/bean/Test-action.xml"/><!-- end set action config files -->        
+</struts>

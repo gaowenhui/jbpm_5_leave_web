@@ -1,0 +1,842 @@
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : localhost
+Source Server Version : 50157
+Source Host           : localhost:3306
+Source Database       : jbpm
+
+Target Server Type    : MYSQL
+Target Server Version : 50157
+File Encoding         : 65001
+
+Date: 2014-07-11 15:49:17
+*/
+
+SET FOREIGN_KEY_CHECKS=0;
+-- ----------------------------
+-- Table structure for `jbpm4_business`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_business`;
+CREATE TABLE `jbpm4_business` (
+  `ID` varchar(32) NOT NULL,
+  `NAME` varchar(255) DEFAULT NULL,
+  `CODE` varchar(50) DEFAULT NULL,
+  `BUSI_DESC` varchar(255) DEFAULT NULL,
+  `OPERANT` varchar(50) DEFAULT NULL COMMENT '在action_config中配置的action路径，返回值无效',
+  `QUERY` varchar(50) DEFAULT NULL COMMENT '在xml配置的action路径',
+  `BUSINESS_CLASS_NAME` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of jbpm4_business
+-- ----------------------------
+INSERT INTO `jbpm4_business` VALUES ('00000000000000000001280737111848', '采购测试', '101', '采购测试', '', '/workflow/queryDetailbuynote.do', '');
+INSERT INTO `jbpm4_business` VALUES ('00000000000000000001280796338783', '请假测试', '202', '请假测试', '', '/workflow/queryDetailleave.do', '');
+INSERT INTO `jbpm4_business` VALUES ('00000000000000000001280796338784', '报销测试', '303', '报销测试', '', '/workflow/queryDetailexpens.do', '');
+
+-- ----------------------------
+-- Table structure for `jbpm4_deploy`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_deploy`;
+CREATE TABLE `jbpm4_deploy` (
+  `ID` varchar(32) NOT NULL COMMENT 'id',
+  `NAME` varchar(255) DEFAULT NULL COMMENT '流程名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '流程编号',
+  `PDSTATUS` char(1) DEFAULT NULL COMMENT '流程状态。0:未发布;1:已发布;2:修改未发布',
+  `PROCESSDEFINE` longtext COMMENT '流程定义的内容',
+  `PDNAME` varchar(30) DEFAULT NULL COMMENT '流程生成XML的名称',
+  `PDVERSION` int(11) DEFAULT NULL COMMENT '流程定义的版本',
+  `PDID` varchar(255) DEFAULT NULL COMMENT '流程定义ID',
+  `FLAG` char(1) DEFAULT NULL COMMENT '启停标志。0:停止;1:启用',
+  `STATUS` char(1) DEFAULT NULL COMMENT '逻辑删除标志。0:逻辑删除;1:未删除',
+  `MODIFIERID` varchar(32) DEFAULT NULL COMMENT '编辑者ID',
+  `PROCESSTYPE` varchar(20) DEFAULT NULL COMMENT '流程类型。主流程:mainprocess;子流程:subprocess',
+  `AGENCYID` varchar(32) DEFAULT NULL,
+  `DEPARTMENTID` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程设计时操作的内容';
+
+-- ----------------------------
+-- Records of jbpm4_deploy
+-- ----------------------------
+INSERT INTO `jbpm4_deploy` VALUES ('140506172388816331465346011650', '新建流程', 'PD14050616773544850', '0', '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<process xmlns=\"http://jbpm.org/4.0/jpdl\" name=\"PD14050616773544850\" id=\"140506172388816331465346011650\" activityName=\"新建流程\" processtype=\"mainprocess\" str_wfParams=\"\"><start name=\"start0\" activityName=\"开始节点\" identifyType=\"start_type\" g=\"149,68,140,40\"><transition to=\"task0\" name=\"transition0\" identityName=\"提交节点\" activityName=\"同意\" pass=\"true\"/></start><task name=\"task0\" activityName=\"提交节点\" identifyType=\"commit-type\" g=\"348,99,140,40\" assignee=\"#{submituser}\" directJump=\"false\" freeJump=\"false\"><assignment-handler class=\"com.toft.widgets.workflow.handler.SubmitTaskActivity\"/><transition to=\"end0\" name=\"transition1\" identityName=\"结束节点\" activityName=\"同意\" pass=\"true\"/></task><end name=\"end0\" activityName=\"结束节点\" identifyType=\"end-type\" g=\"635,98,140,40\"/></process>', 'PD14050616773544850.jpdl.xml', '0', null, '1', '1', null, 'mainprocess', null, null);
+INSERT INTO `jbpm4_deploy` VALUES ('140506331477437394988426612000', '会签流程', 'PD14050628084043723', '0', '', 'PD14050628084043723.jpdl.xml', '0', null, '1', '1', null, 'mainprocess', null, null);
+INSERT INTO `jbpm4_deploy` VALUES ('14050640750744223252967566021', '会签流程2', 'PD14050640241131728', '0', '', 'PD14050640241131728.jpdl.xml', '0', null, '1', '1', null, 'mainprocess', null, null);
+
+-- ----------------------------
+-- Table structure for `jbpm4_deployment`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_deployment`;
+CREATE TABLE `jbpm4_deployment` (
+  `DBID_` bigint(20) NOT NULL,
+  `NAME_` longtext,
+  `TIMESTAMP_` bigint(20) DEFAULT NULL,
+  `STATE_` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发布后的流程';
+
+-- ----------------------------
+-- Records of jbpm4_deployment
+-- ----------------------------
+INSERT INTO `jbpm4_deployment` VALUES ('1', null, '0', 'active');
+INSERT INTO `jbpm4_deployment` VALUES ('21', null, '0', 'active');
+INSERT INTO `jbpm4_deployment` VALUES ('28', null, '0', 'active');
+INSERT INTO `jbpm4_deployment` VALUES ('10001', null, '0', 'active');
+INSERT INTO `jbpm4_deployment` VALUES ('10012', null, '0', 'active');
+
+-- ----------------------------
+-- Table structure for `jbpm4_deployprop`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_deployprop`;
+CREATE TABLE `jbpm4_deployprop` (
+  `DBID_` bigint(20) NOT NULL COMMENT '记录标识',
+  `DEPLOYMENT_` bigint(20) DEFAULT NULL COMMENT '部署标识',
+  `OBJNAME_` varchar(255) DEFAULT NULL COMMENT '流程定义名称',
+  `KEY_` varchar(255) DEFAULT NULL COMMENT '流程定义属性名称',
+  `STRINGVAL_` varchar(255) DEFAULT NULL COMMENT '流程定义属性名称的值',
+  `LONGVAL_` bigint(20) DEFAULT NULL COMMENT '流程定义属性名称的值',
+  PRIMARY KEY (`DBID_`),
+  KEY `IDX_DEPLPROP_DEPL` (`DEPLOYMENT_`),
+  CONSTRAINT `FK_DEPLPROP_DEPL` FOREIGN KEY (`DEPLOYMENT_`) REFERENCES `jbpm4_deployment` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程定义属性表';
+
+-- ----------------------------
+-- Records of jbpm4_deployprop
+-- ----------------------------
+INSERT INTO `jbpm4_deployprop` VALUES ('4', '1', 'leave', 'langid', 'jpdl-4.4', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('5', '1', 'leave', 'pdid', 'leave-1', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('6', '1', 'leave', 'pdkey', 'leave', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('7', '1', 'leave', 'pdversion', null, '1');
+INSERT INTO `jbpm4_deployprop` VALUES ('24', '21', 'leave', 'langid', 'jpdl-4.4', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('25', '21', 'leave', 'pdid', 'leave-2', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('26', '21', 'leave', 'pdkey', 'leave', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('27', '21', 'leave', 'pdversion', null, '2');
+INSERT INTO `jbpm4_deployprop` VALUES ('31', '28', 'leave', 'langid', 'jpdl-4.4', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('32', '28', 'leave', 'pdid', 'leave-3', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('33', '28', 'leave', 'pdkey', 'leave', null);
+INSERT INTO `jbpm4_deployprop` VALUES ('34', '28', 'leave', 'pdversion', null, '3');
+
+-- ----------------------------
+-- Table structure for `jbpm4_execution`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_execution`;
+CREATE TABLE `jbpm4_execution` (
+  `DBID_` bigint(20) NOT NULL,
+  `CLASS_` varchar(255) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `ACTIVITYNAME_` varchar(255) DEFAULT NULL,
+  `PROCDEFID_` varchar(255) DEFAULT NULL,
+  `HASVARS_` bit(1) DEFAULT NULL,
+  `NAME_` varchar(255) DEFAULT NULL,
+  `KEY_` varchar(255) DEFAULT NULL,
+  `ID_` varchar(255) DEFAULT NULL,
+  `STATE_` varchar(255) DEFAULT NULL,
+  `SUSPHISTSTATE_` varchar(255) DEFAULT NULL,
+  `PRIORITY_` int(11) DEFAULT NULL,
+  `HISACTINST_` bigint(20) DEFAULT NULL,
+  `PARENT_` bigint(20) DEFAULT NULL,
+  `INSTANCE_` bigint(20) DEFAULT NULL,
+  `SUPEREXEC_` bigint(20) DEFAULT NULL,
+  `SUBPROCINST_` bigint(20) DEFAULT NULL,
+  `PARENT_IDX_` int(11) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`),
+  UNIQUE KEY `ID_` (`ID_`),
+  UNIQUE KEY `ID__2` (`ID_`),
+  KEY `FK_EXEC_SUBPI` (`SUBPROCINST_`),
+  KEY `FK_EXEC_INSTANCE` (`INSTANCE_`),
+  KEY `FK_EXEC_SUPEREXEC` (`SUPEREXEC_`),
+  KEY `FK_EXEC_PARENT` (`PARENT_`),
+  KEY `IDX_EXEC_SUPEREXEC` (`SUPEREXEC_`),
+  KEY `IDX_EXEC_INSTANCE` (`INSTANCE_`),
+  KEY `IDX_EXEC_SUBPI` (`SUBPROCINST_`),
+  KEY `IDX_EXEC_PARENT` (`PARENT_`),
+  KEY `IND_FK_EXEC_INSTANCE` (`INSTANCE_`),
+  KEY `IND_FK_EXEC_PARENT` (`PARENT_`),
+  KEY `IND_FK_EXEC_SUBPI` (`SUBPROCINST_`),
+  KEY `IND_FK_EXEC_SUPEREXEC` (`SUPEREXEC_`),
+  CONSTRAINT `FK_EXEC_INSTANCE` FOREIGN KEY (`INSTANCE_`) REFERENCES `jbpm4_execution` (`DBID_`),
+  CONSTRAINT `FK_EXEC_PARENT` FOREIGN KEY (`PARENT_`) REFERENCES `jbpm4_execution` (`DBID_`),
+  CONSTRAINT `FK_EXEC_SUBPI` FOREIGN KEY (`SUBPROCINST_`) REFERENCES `jbpm4_execution` (`DBID_`),
+  CONSTRAINT `FK_EXEC_SUPEREXEC` FOREIGN KEY (`SUPEREXEC_`) REFERENCES `jbpm4_execution` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程实例表';
+
+-- ----------------------------
+-- Records of jbpm4_execution
+-- ----------------------------
+INSERT INTO `jbpm4_execution` VALUES ('10008', 'pvm', '3', '经理审批', 'leave-1', '', null, null, 'leave.10008', 'active-root', null, '0', '10027', null, '10008', null, null, null);
+
+-- ----------------------------
+-- Table structure for `jbpm4_ext_rule`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_ext_rule`;
+CREATE TABLE `jbpm4_ext_rule` (
+  `ID` varchar(32) NOT NULL COMMENT '唯一标识',
+  `CODE` varchar(32) DEFAULT NULL COMMENT '任务参与者规则编号',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '任务参与者规则名称',
+  `FLAG` char(1) NOT NULL COMMENT '状态标识',
+  `STATUS` char(1) DEFAULT NULL COMMENT '是否删除',
+  `AGENCY_ID` varchar(32) DEFAULT NULL COMMENT '机构ID',
+  `DEPARTMENT_ID` varchar(32) DEFAULT NULL COMMENT '部门ID',
+  `CLASS_NAME` varchar(255) DEFAULT NULL COMMENT '参与者规则实现类',
+  `IS_EXCLUDE` varchar(1) DEFAULT '0' COMMENT '是否排除提交人',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='参与者规则表';
+
+-- ----------------------------
+-- Records of jbpm4_ext_rule
+-- ----------------------------
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b34a6924a0134a69352580001', '0001', '部门经理', '1', '1', null, null, null, '0');
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b34a6924a0134a69ba0980003', '0002', '主管副总', '1', '1', null, null, null, '0');
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b34a6924a0134a69cc0f30005', '0003', '监管副总', '1', '1', null, null, null, '0');
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b34a6924a0134a69d86820007', '0004', '财务人员', '1', '1', null, null, null, '0');
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b34a6924a0134a69dd9c60009', '0005', '财务总监', '1', '1', null, null, null, '0');
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b34a6924a0134a69e2c15000b', '0006', '总经理', '1', '1', null, null, null, '0');
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b357eff5601357f0549080011', '0007', '客户经理', '1', '1', null, null, null, '0');
+INSERT INTO `jbpm4_ext_rule` VALUES ('8a98c13b35c28c560135c2c447c40010', '0008', '流程启动者', '1', '1', null, null, 'com.toft.widgets.workflow.participantrule.impl.MyParticipantRuleImpl', '0');
+
+-- ----------------------------
+-- Table structure for `jbpm4_ext_rule_detail`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_ext_rule_detail`;
+CREATE TABLE `jbpm4_ext_rule_detail` (
+  `ID` varchar(32) NOT NULL COMMENT '唯一标识',
+  `PARTICIPANT_TYPE` char(1) DEFAULT NULL COMMENT '规则类型:0,用户;1,机构;2,职责;3,部门4.岗位',
+  `PARTICIPANT_ID` varchar(32) DEFAULT NULL COMMENT '参与者ID',
+  `RULE_ID` varchar(32) DEFAULT NULL COMMENT '参与者规则ID',
+  `IS_DYNAMIC` char(1) DEFAULT NULL COMMENT '是否动态策略:0,否;1,是',
+  `DYNAMIC_TYPE` varchar(40) DEFAULT NULL COMMENT '动态类型:fatherAgency,上级机构',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='参与者规则明细表';
+
+-- ----------------------------
+-- Records of jbpm4_ext_rule_detail
+-- ----------------------------
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b34a6924a0134a69b18800002', '2', '1318470302167', '8a98c13b34a6924a0134a69352580001', '1', 'AGENCY');
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b34a6924a0134a69c18d60004', '2', '1318470302168', '8a98c13b34a6924a0134a69ba0980003', '1', 'AGENCY');
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b34a6924a0134a69d22e40006', '2', '1318470302169', '8a98c13b34a6924a0134a69cc0f30005', '1', 'AGENCY');
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b34a6924a0134a69daae90008', '2', '1318470302170', '8a98c13b34a6924a0134a69d86820007', '1', 'AGENCY');
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b34a6924a0134a69dfc0b000a', '2', '1318470302171', '8a98c13b34a6924a0134a69dd9c60009', '1', 'AGENCY');
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b34a6924a0134a69f0faa000c', '2', '1318470302172', '8a98c13b34a6924a0134a69e2c15000b', '1', 'AGENCY');
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b357eff5601357f0574c00012', '2', '1329275557501', '8a98c13b357eff5601357f0549080011', '1', 'AGENCY');
+INSERT INTO `jbpm4_ext_rule_detail` VALUES ('8a98c13b35c28c560135c2c467f50011', '0', '006', '8a98c13b35c28c560135c2c447c40010', '9', '9');
+
+-- ----------------------------
+-- Table structure for `jbpm4_global_param`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_global_param`;
+CREATE TABLE `jbpm4_global_param` (
+  `ID` varchar(32) NOT NULL COMMENT 'id',
+  `CODE` varchar(32) DEFAULT NULL COMMENT '变量英文名字',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '变量中文名字',
+  `DES` varchar(256) DEFAULT NULL COMMENT '备注',
+  `STATUS` char(1) DEFAULT NULL COMMENT '关联删除标识(0,可以删除；1，不可删除)',
+  `VARIABLE_TYPE` varchar(32) DEFAULT NULL COMMENT '变量类型',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='工作流全局参数设置';
+
+-- ----------------------------
+-- Records of jbpm4_global_param
+-- ----------------------------
+INSERT INTO `jbpm4_global_param` VALUES ('00000000000000000001285821114053', 'money', '金额', '', '1', 'String');
+INSERT INTO `jbpm4_global_param` VALUES ('00000000000000000001285821114054', 'businessType', '业务类型', '', '1', 'String');
+INSERT INTO `jbpm4_global_param` VALUES ('00000000000000000001285821114055', 'submituser', '提交人', '', '1', 'String');
+INSERT INTO `jbpm4_global_param` VALUES ('00000000000000000001285821114056', 'businessRecordId', '单据标识', '', '1', 'String');
+INSERT INTO `jbpm4_global_param` VALUES ('00000000000000000001285821114057', 'businessName', '业务名称', '', '1', 'String');
+INSERT INTO `jbpm4_global_param` VALUES ('00000000000000000001285821114058', 'businessSN', '单据编号', '', '1', 'String');
+INSERT INTO `jbpm4_global_param` VALUES ('00000000000000000001291880568838', 'businessUrl', '业务URL', '', '1', 'String');
+
+-- ----------------------------
+-- Table structure for `jbpm4_hist_actinst`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_hist_actinst`;
+CREATE TABLE `jbpm4_hist_actinst` (
+  `DBID_` bigint(20) NOT NULL,
+  `CLASS_` varchar(255) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `HPROCI_` bigint(20) DEFAULT NULL,
+  `TYPE_` varchar(255) DEFAULT NULL,
+  `EXECUTION_` varchar(255) DEFAULT NULL,
+  `ACTIVITY_NAME_` varchar(255) DEFAULT NULL,
+  `START_` datetime DEFAULT NULL,
+  `END_` datetime DEFAULT NULL,
+  `DURATION_` bigint(20) DEFAULT NULL,
+  `TRANSITION_` varchar(255) DEFAULT NULL,
+  `NEXTIDX_` int(11) DEFAULT NULL,
+  `HTASK_` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`),
+  KEY `FK_HACTI_HPROCI` (`HPROCI_`),
+  KEY `FK_HTI_HTASK` (`HTASK_`),
+  KEY `IDX_HACTI_HPROCI` (`HPROCI_`),
+  KEY `IDX_HTI_HTASK` (`HTASK_`),
+  CONSTRAINT `FK_HACTI_HPROCI` FOREIGN KEY (`HPROCI_`) REFERENCES `jbpm4_hist_procinst` (`DBID_`),
+  CONSTRAINT `FK_HTI_HTASK` FOREIGN KEY (`HTASK_`) REFERENCES `jbpm4_hist_task` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程活动(节点)实例表';
+
+-- ----------------------------
+-- Records of jbpm4_hist_actinst
+-- ----------------------------
+INSERT INTO `jbpm4_hist_actinst` VALUES ('11', 'task', '1', '8', 'task', 'leave.8', '申请', '2014-07-11 11:05:08', '2014-07-11 11:05:26', '18571', null, '1', '10');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('16', 'task', '1', '8', 'task', 'leave.8', '经理审批', '2014-07-11 11:05:26', '2014-07-11 11:06:20', '54553', '批准', '1', '15');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('18', 'excl', '0', '8', 'decision', 'leave.8', 'exclusive1', '2014-07-11 11:06:20', '2014-07-11 11:06:20', '7', '老板审批', '1', null);
+INSERT INTO `jbpm4_hist_actinst` VALUES ('20', 'task', '1', '8', 'task', 'leave.8', '老板审批', '2014-07-11 11:06:20', '2014-07-11 11:06:55', '35172', 'jbpm_no_task_outcome_specified_jbpm', '1', '19');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('38', 'task', '1', '35', 'task', 'leave.35', '申请', '2014-07-11 11:07:15', '2014-07-11 11:07:36', '21955', null, '1', '37');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('42', 'task', '1', '39', 'task', 'leave.39', '申请', '2014-07-11 11:07:16', '2014-07-11 11:09:14', '118075', null, '1', '41');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('47', 'task', '1', '35', 'task', 'leave.35', '经理审批', '2014-07-11 11:07:36', '2014-07-11 11:08:00', '24613', '批准', '1', '46');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('48', 'excl', '0', '35', 'decision', 'leave.35', 'exclusive1', '2014-07-11 11:08:00', '2014-07-11 11:08:00', '6', '老板审批', '1', null);
+INSERT INTO `jbpm4_hist_actinst` VALUES ('50', 'task', '1', '35', 'task', 'leave.35', '老板审批', '2014-07-11 11:08:00', '2014-07-11 11:08:19', '19742', 'jbpm_no_task_outcome_specified_jbpm', '1', '49');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('56', 'task', '1', '39', 'task', 'leave.39', '经理审批', '2014-07-11 11:09:14', '2014-07-11 11:09:41', '27219', '批准', '1', '55');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('57', 'excl', '0', '39', 'decision', 'leave.39', 'exclusive1', '2014-07-11 11:09:41', '2014-07-11 11:09:41', '4', '老板审批', '1', null);
+INSERT INTO `jbpm4_hist_actinst` VALUES ('59', 'task', '1', '39', 'task', 'leave.39', '老板审批', '2014-07-11 11:09:41', '2014-07-11 11:10:15', '34268', 'jbpm_no_task_outcome_specified_jbpm', '1', '58');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('10011', 'task', '1', '10008', 'task', 'leave.10008', '申请', '2014-07-10 14:54:17', '2014-07-10 14:55:00', '43800', null, '1', '10010');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('10022', 'task', '1', '10019', 'task', 'leave.10019', '申请', '2014-07-10 14:54:40', '2014-07-10 14:59:08', '268405', null, '1', '10021');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('10027', 'task', '0', '10008', 'task', 'leave.10008', '经理审批', '2014-07-10 14:55:00', null, '0', null, '1', '10026');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('10032', 'task', '1', '10019', 'task', 'leave.10019', '经理审批', '2014-07-10 14:59:08', '2014-07-10 14:59:31', '23487', '批准', '1', '10031');
+INSERT INTO `jbpm4_hist_actinst` VALUES ('10033', 'excl', '0', '10019', 'decision', 'leave.10019', 'exclusive1', '2014-07-10 14:59:31', '2014-07-10 14:59:31', '6', '老板审批', '1', null);
+INSERT INTO `jbpm4_hist_actinst` VALUES ('10035', 'task', '1', '10019', 'task', 'leave.10019', '老板审批', '2014-07-10 14:59:31', '2014-07-10 15:02:59', '208152', 'jbpm_no_task_outcome_specified_jbpm', '1', '10034');
+
+-- ----------------------------
+-- Table structure for `jbpm4_hist_detail`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_hist_detail`;
+CREATE TABLE `jbpm4_hist_detail` (
+  `DBID_` bigint(20) NOT NULL COMMENT '记录标识',
+  `CLASS_` varchar(255) NOT NULL COMMENT '鉴别标识',
+  `DBVERSION_` int(11) NOT NULL COMMENT '记录版本号',
+  `USERID_` varchar(255) DEFAULT NULL COMMENT '用户标识',
+  `TIME_` datetime DEFAULT NULL COMMENT '记录产生的时间',
+  `HPROCI_` bigint(20) DEFAULT NULL COMMENT '历史流程实例引用',
+  `HPROCIIDX_` int(11) DEFAULT NULL COMMENT '历史流程实例索引',
+  `HACTI_` bigint(20) DEFAULT NULL COMMENT '历史节点的引用',
+  `HACTIIDX_` int(11) DEFAULT NULL COMMENT '历史节点实例索引',
+  `HTASK_` bigint(20) DEFAULT NULL COMMENT '历史任务的引用',
+  `HTASKIDX_` int(11) DEFAULT NULL COMMENT '历史任务实例索引',
+  `HVAR_` bigint(20) DEFAULT NULL COMMENT '历史变量的引用',
+  `HVARIDX_` int(11) DEFAULT NULL COMMENT '历史变量实例索引',
+  `MESSAGE_` longtext COMMENT '任务的评论',
+  `OLD_INT_` int(11) DEFAULT NULL COMMENT '子类HistoryPriorityUpdateImpl原有的优先级',
+  `NEW_INT_` int(11) DEFAULT NULL COMMENT '子类HistoryPriorityUpdateImpl新的优先级',
+  `OLD_STR_` varchar(255) DEFAULT NULL COMMENT '子类HistoryTaskAssignmentImpl任务原有参与者',
+  `NEW_STR_` varchar(255) DEFAULT NULL COMMENT '子类HistoryTaskAssignmentImpl任务新的参与者',
+  `OLD_TIME_` datetime DEFAULT NULL COMMENT '子类HistoryTaskDuedateUpdateImpl原有的运行时间',
+  `NEW_TIME_` datetime DEFAULT NULL COMMENT '子类HistoryTaskDuedateUpdateImpl现在的支持时间',
+  `PARENT_` bigint(20) DEFAULT NULL,
+  `PARENT_IDX_` int(11) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`),
+  KEY `IDX_HDET_HVAR` (`HVAR_`),
+  KEY `IDX_HDET_HTASK` (`HTASK_`),
+  KEY `IDX_HDET_HACTI` (`HACTI_`),
+  KEY `IDX_HDET_HPROCI` (`HPROCI_`),
+  CONSTRAINT `FK_HDETAIL_HACTI` FOREIGN KEY (`HACTI_`) REFERENCES `jbpm4_hist_actinst` (`DBID_`),
+  CONSTRAINT `FK_HDETAIL_HPROCI` FOREIGN KEY (`HPROCI_`) REFERENCES `jbpm4_hist_procinst` (`DBID_`),
+  CONSTRAINT `FK_HDETAIL_HTASK` FOREIGN KEY (`HTASK_`) REFERENCES `jbpm4_hist_task` (`DBID_`),
+  CONSTRAINT `FK_HDETAIL_HVAR` FOREIGN KEY (`HVAR_`) REFERENCES `jbpm4_hist_var` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程历史详细信息表';
+
+-- ----------------------------
+-- Records of jbpm4_hist_detail
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_hist_procinst`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_hist_procinst`;
+CREATE TABLE `jbpm4_hist_procinst` (
+  `DBID_` bigint(20) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `ID_` varchar(255) DEFAULT NULL,
+  `PROCDEFID_` varchar(255) DEFAULT NULL,
+  `KEY_` varchar(255) DEFAULT NULL,
+  `START_` datetime DEFAULT NULL,
+  `END_` datetime DEFAULT NULL,
+  `DURATION_` bigint(20) DEFAULT NULL,
+  `STATE_` varchar(255) DEFAULT NULL,
+  `ENDACTIVITY_` varchar(255) DEFAULT NULL,
+  `NEXTIDX_` int(11) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程任务实例历史表';
+
+-- ----------------------------
+-- Records of jbpm4_hist_procinst
+-- ----------------------------
+INSERT INTO `jbpm4_hist_procinst` VALUES ('8', '1', 'leave.8', 'leave-1', null, '2014-07-11 11:05:08', '2014-07-11 11:06:55', '107192', 'ended', 'end1', '1');
+INSERT INTO `jbpm4_hist_procinst` VALUES ('35', '1', 'leave.35', 'leave-2', null, '2014-07-11 11:07:15', '2014-07-11 11:08:19', '64761', 'ended', 'end1', '1');
+INSERT INTO `jbpm4_hist_procinst` VALUES ('39', '1', 'leave.39', 'leave-3', null, '2014-07-11 11:07:16', '2014-07-11 11:10:15', '179285', 'ended', 'end1', '1');
+INSERT INTO `jbpm4_hist_procinst` VALUES ('10008', '0', 'leave.10008', 'leave-1', null, '2014-07-10 14:54:17', null, null, 'active', null, '1');
+INSERT INTO `jbpm4_hist_procinst` VALUES ('10019', '1', 'leave.10019', 'leave-2', null, '2014-07-10 14:54:40', '2014-07-10 15:02:59', '499173', 'ended', 'end1', '1');
+
+-- ----------------------------
+-- Table structure for `jbpm4_hist_task`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_hist_task`;
+CREATE TABLE `jbpm4_hist_task` (
+  `DBID_` bigint(20) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `EXECUTION_` varchar(255) DEFAULT NULL,
+  `OUTCOME_` varchar(255) DEFAULT NULL,
+  `ASSIGNEE_` varchar(255) DEFAULT NULL,
+  `PRIORITY_` int(11) DEFAULT NULL,
+  `STATE_` varchar(255) DEFAULT NULL,
+  `CREATE_` datetime DEFAULT NULL,
+  `END_` datetime DEFAULT NULL,
+  `DURATION_` bigint(20) DEFAULT NULL,
+  `NEXTIDX_` int(11) DEFAULT NULL,
+  `SUPERTASK_` bigint(20) DEFAULT NULL,
+  `PROCINST_` bigint(20) DEFAULT NULL COMMENT '流程实例ID',
+  `SYSTEM_CODE_` varchar(32) DEFAULT NULL COMMENT '系统标识',
+  PRIMARY KEY (`DBID_`),
+  KEY `FK_HSUPERT_SUB` (`SUPERTASK_`),
+  KEY `IDX_HSUPERT_SUB` (`SUPERTASK_`),
+  CONSTRAINT `FK_HSUPERT_SUB` FOREIGN KEY (`SUPERTASK_`) REFERENCES `jbpm4_hist_task` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程任务实例历史表';
+
+-- ----------------------------
+-- Records of jbpm4_hist_task
+-- ----------------------------
+INSERT INTO `jbpm4_hist_task` VALUES ('10', '1', 'leave.8', null, 'user', '0', 'completed', '2014-07-11 11:05:08', '2014-07-11 11:05:26', '18575', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('15', '1', 'leave.8', '批准', 'manager', '0', 'completed', '2014-07-11 11:05:26', '2014-07-11 11:06:20', '54556', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('19', '1', 'leave.8', 'jbpm_no_task_outcome_specified_jbpm', 'boss', '0', 'completed', '2014-07-11 11:06:20', '2014-07-11 11:06:55', '35175', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('37', '1', 'leave.35', null, 'user', '0', 'completed', '2014-07-11 11:07:15', '2014-07-11 11:07:36', '21958', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('41', '1', 'leave.39', null, 'user', '0', 'completed', '2014-07-11 11:07:16', '2014-07-11 11:09:14', '118079', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('46', '1', 'leave.35', '批准', 'manager', '0', 'completed', '2014-07-11 11:07:36', '2014-07-11 11:08:00', '24617', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('49', '1', 'leave.35', 'jbpm_no_task_outcome_specified_jbpm', 'boss', '0', 'completed', '2014-07-11 11:08:00', '2014-07-11 11:08:19', '19745', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('55', '1', 'leave.39', '批准', 'manager', '0', 'completed', '2014-07-11 11:09:14', '2014-07-11 11:09:41', '27223', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('58', '1', 'leave.39', 'jbpm_no_task_outcome_specified_jbpm', 'boss', '0', 'completed', '2014-07-11 11:09:41', '2014-07-11 11:10:15', '34270', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('10010', '1', 'leave.10008', null, 'user', '0', 'completed', '2014-07-10 14:54:17', '2014-07-10 14:55:00', '43806', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('10021', '1', 'leave.10019', null, 'user', '0', 'completed', '2014-07-10 14:54:40', '2014-07-10 14:59:08', '268409', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('10026', '0', 'leave.10008', null, 'manager', '0', null, '2014-07-10 14:55:00', null, '0', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('10031', '1', 'leave.10019', '批准', 'manager', '0', 'completed', '2014-07-10 14:59:08', '2014-07-10 14:59:31', '23490', '1', null, null, null);
+INSERT INTO `jbpm4_hist_task` VALUES ('10034', '1', 'leave.10019', 'jbpm_no_task_outcome_specified_jbpm', 'boss', '0', 'completed', '2014-07-10 14:59:31', '2014-07-10 15:02:59', '208156', '1', null, null, null);
+
+-- ----------------------------
+-- Table structure for `jbpm4_hist_var`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_hist_var`;
+CREATE TABLE `jbpm4_hist_var` (
+  `DBID_` bigint(20) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `PROCINSTID_` varchar(255) DEFAULT NULL,
+  `EXECUTIONID_` varchar(255) DEFAULT NULL,
+  `VARNAME_` varchar(255) DEFAULT NULL,
+  `VALUE_` varchar(255) DEFAULT NULL,
+  `HPROCI_` bigint(20) DEFAULT NULL,
+  `HTASK_` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`),
+  KEY `FK_HVAR_HPROCI` (`HPROCI_`),
+  KEY `FK_HVAR_HTASK` (`HTASK_`),
+  KEY `IDX_HVAR_HPROCI` (`HPROCI_`),
+  KEY `IDX_HVAR_HTASK` (`HTASK_`),
+  CONSTRAINT `FK_HVAR_HPROCI` FOREIGN KEY (`HPROCI_`) REFERENCES `jbpm4_hist_procinst` (`DBID_`),
+  CONSTRAINT `FK_HVAR_HTASK` FOREIGN KEY (`HTASK_`) REFERENCES `jbpm4_hist_task` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程变量历史表';
+
+-- ----------------------------
+-- Records of jbpm4_hist_var
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_id_group`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_id_group`;
+CREATE TABLE `jbpm4_id_group` (
+  `DBID_` bigint(20) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `ID_` varchar(255) DEFAULT NULL,
+  `NAME_` varchar(255) DEFAULT NULL,
+  `TYPE_` varchar(255) DEFAULT NULL,
+  `PARENT_` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`),
+  KEY `FK_GROUP_PARENT` (`PARENT_`),
+  KEY `IDX_GROUP_PARENT` (`PARENT_`),
+  CONSTRAINT `FK_GROUP_PARENT` FOREIGN KEY (`PARENT_`) REFERENCES `jbpm4_id_group` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of jbpm4_id_group
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_id_membership`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_id_membership`;
+CREATE TABLE `jbpm4_id_membership` (
+  `DBID_` bigint(20) NOT NULL COMMENT '记录标识',
+  `DBVERSION_` int(11) NOT NULL COMMENT '记录版本号',
+  `USER_` bigint(20) DEFAULT NULL COMMENT '用户引用',
+  `GROUP_` bigint(20) DEFAULT NULL COMMENT '组的引用',
+  `NAME_` varchar(255) DEFAULT NULL COMMENT '角色名称',
+  PRIMARY KEY (`DBID_`),
+  KEY `FK_MEM_GROUP` (`GROUP_`),
+  KEY `IDX_MEM_USER` (`USER_`),
+  CONSTRAINT `FK_MEM_GROUP` FOREIGN KEY (`GROUP_`) REFERENCES `jbpm4_id_group` (`DBID_`),
+  CONSTRAINT `FK_MEM_USER` FOREIGN KEY (`USER_`) REFERENCES `jbpm4_id_user` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of jbpm4_id_membership
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_id_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_id_user`;
+CREATE TABLE `jbpm4_id_user` (
+  `DBID_` bigint(20) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `ID_` varchar(255) DEFAULT NULL,
+  `PASSWORD_` varchar(255) DEFAULT NULL,
+  `GIVENNAME_` varchar(255) DEFAULT NULL,
+  `FAMILYNAME_` varchar(255) DEFAULT NULL,
+  `BUSINESSEMAIL_` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of jbpm4_id_user
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_job`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_job`;
+CREATE TABLE `jbpm4_job` (
+  `DBID_` bigint(20) NOT NULL COMMENT '记录标识',
+  `CLASS_` varchar(255) NOT NULL COMMENT '鉴别标识',
+  `DBVERSION_` int(11) NOT NULL COMMENT '记录版本号',
+  `DUEDATE_` datetime DEFAULT NULL COMMENT '运行时间',
+  `STATE_` varchar(255) DEFAULT NULL COMMENT '状态',
+  `ISEXCLUSIVE_` bit(1) DEFAULT NULL COMMENT '是否可并发执行标识',
+  `LOCKOWNER_` varchar(255) DEFAULT NULL COMMENT '定时器拥有者',
+  `LOCKEXPTIME_` datetime DEFAULT NULL COMMENT '定时器过期时间',
+  `EXCEPTION_` longtext COMMENT '定时器执行时的异常',
+  `RETRIES_` int(11) DEFAULT NULL COMMENT '异常出现后所尝试执行的次数',
+  `PROCESSINSTANCE_` bigint(20) DEFAULT NULL COMMENT '流程实例的引用',
+  `EXECUTION_` bigint(20) DEFAULT NULL COMMENT '执行实例的引用',
+  `CFG_` bigint(20) DEFAULT NULL COMMENT '流程文件的引用',
+  `SIGNAL_` varchar(255) DEFAULT NULL COMMENT '子类org.jbpm.pvm.internal.job.TimerImpl的signalName属性',
+  `EVENT_` varchar(255) DEFAULT NULL COMMENT '子类org.jbpm.pvm.internal.job.TimerImpl的eventName属性',
+  `REPEAT_` varchar(255) DEFAULT NULL COMMENT '子类org.jbpm.pvm.internal.job.TimerImpl的repeat属性',
+  PRIMARY KEY (`DBID_`),
+  KEY `IDX_JOBDUEDATE` (`DUEDATE_`),
+  KEY `IDX_JOBLOCKEXP` (`LOCKEXPTIME_`),
+  KEY `IDX_JOBRETRIES` (`RETRIES_`),
+  KEY `IDX_JOB_CFG` (`CFG_`),
+  KEY `IDX_JOB_EXE` (`EXECUTION_`),
+  KEY `IDX_JOB_PRINST` (`PROCESSINSTANCE_`),
+  CONSTRAINT `FK_JOB_CFG` FOREIGN KEY (`CFG_`) REFERENCES `jbpm4_lob` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='定时表，存放Timer（定义器）的定义信息';
+
+-- ----------------------------
+-- Records of jbpm4_job
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_lob`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_lob`;
+CREATE TABLE `jbpm4_lob` (
+  `DBID_` bigint(20) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `BLOB_VALUE_` longblob,
+  `DEPLOYMENT_` bigint(20) DEFAULT NULL,
+  `NAME_` longtext,
+  PRIMARY KEY (`DBID_`),
+  KEY `IDX_LOB_DEPLOYMENT` (`DEPLOYMENT_`),
+  CONSTRAINT `FK_LOB_DEPLOYMENT` FOREIGN KEY (`DEPLOYMENT_`) REFERENCES `jbpm4_deployment` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程定义存储表';
+
+-- ----------------------------
+-- Records of jbpm4_lob
+-- ----------------------------
+INSERT INTO `jbpm4_lob` VALUES ('2', '0', 0x3C3F786D6C2076657273696F6E3D22312E302220656E636F64696E673D225554462D38223F3E0D0A0D0A3C70726F63657373206E616D653D226C656176652220786D6C6E733D22687474703A2F2F6A62706D2E6F72672F342E342F6A70646C223E0D0A2020203C737461727420673D223139362C32352C34382C343822206E616D653D22737461727431223E0D0A2020202020203C7472616E736974696F6E20746F3D22E794B3E8AFB7222F3E0D0A2020203C2F73746172743E0D0A2020203C7461736B2061737369676E65653D22237B6F776E65727D2220666F726D3D22726571756573742E6A73702220673D223137322C3131382C39322C353222206E616D653D22E794B3E8AFB7223E0D0A2020202020203C7472616E736974696F6E20746F3D22E7BB8FE79086E5AEA1E689B9222F3E0D0A2020203C2F7461736B3E0D0A2020203C7461736B2061737369676E65653D226D616E616765722220666F726D3D226D616E616765722E68746D6C2220673D223137322C3232352C39322C353222206E616D653D22E7BB8FE79086E5AEA1E689B9223E0D0A2020202020203C7472616E736974696F6E20673D222D33322C2D3822206E616D653D22E689B9E587862220746F3D226578636C757369766531222F3E0D0A2020202020203C7472616E736974696F6E20673D223132382C3232313B3132342C3136353A2D34322C2D313822206E616D653D22E9A9B3E59B9E2220746F3D22E794B3E8AFB7222F3E0D0A2020203C2F7461736B3E0D0A2020203C6465636973696F6E20657870723D22237B646179203E2033203F2027E88081E69DBFE5AEA1E689B927203A2027E7BB93E69D9F277D2220673D223230302C3330382C34382C343822206E616D653D226578636C757369766531223E0D0A2020202020203C7472616E736974696F6E20673D222D33392C2D313022206E616D653D22E7BB93E69D9F2220746F3D22656E6431222F3E0D0A2020202020203C7472616E736974696F6E20673D223333392C3334323A2D34382C2D313122206E616D653D22E88081E69DBFE5AEA1E689B92220746F3D22E88081E69DBFE5AEA1E689B9222F3E0D0A2020203C2F6465636973696F6E3E0D0A2020203C7461736B2061737369676E65653D22626F73732220666F726D3D22626F73732E68746D6C2220673D223239342C3337352C39322C353222206E616D653D22E88081E69DBFE5AEA1E689B9223E0D0A2020202020203C7472616E736974696F6E20673D223333392C3435373A2220746F3D22656E6431222F3E0D0A2020203C2F7461736B3E0D0A2020203C656E6420673D223139392C3434352C34382C343822206E616D653D22656E6431222F3E0D0A3C2F70726F636573733E, '1', 'leave2.jpdl.xml');
+INSERT INTO `jbpm4_lob` VALUES ('3', '0', 0x89504E470D0A1A0A0000000D494844520000043A000002490802000000C429C0BB0000342A49444154789CEDDD2D78A3DCDA80D123478EAC1C3972E4C8CA9195959595919191C84824128944229148241289AC3C9BD0E6CDB4E9EF34652759EBE4E2E2CD24E96E3F93FB7BF8F9DF1D00004094FE37F702000000F6932B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40AB11886E16ED8B31D1F00009C25B9C2AC86BBA25A27D9F5EDEAD7F5F2C7D5E2FBD5E262DA5E2F2F6E93DFABF4BAA8D3BEEF878DB9970B00C097922BCC23B4479A2F6E369512B2649DDDE455D274653FB4E11176361973B3487E5F2F2E42CCACF3DB295A0C5B0000CE875C610659B90A0572B3FC1922A4EDABE1AE9B1EFDC3CEEE7EDBD7EBFCE666F533B44D5EAE4C5A0000CE875CE1ABADD2EB9BE58F102AC35DBF0992B76EC35BAE973F92ECBAEB3A63160080732057F83A7DDF2DD6978BE477D5E4CFCD525EDEAFDAFC36F9BD5CFF69DB66E8CD5800004E9C5CE1AB0C772133C2A3BF6BDF3B57F97BDB4D9F33CE58140B00C049932B7C89E16E955E2D92DFFDD07E6CAEB2BB1F82E736F99DA4D78A0500E0B4C915BE42562E6F963F36C780FDCB5CE5BF6DDD16D7CB1F59B9721E0B00C009932B1C5C3FF49B2B11DFFCFB5C65777F9DDFDEAC7EB56D7B5F2C00009C1CB9C2618590D874C5CF6D6F6CCE5DD9BBDFBDF7F9E97E2C5DDBF57D6FC00200707AE40A87157225B4CA1815431362A31BDACD76DCEFFF793FC96E42B1344DD38FC1D2CFFDBB0200F0C9E40A8734DCE55572BDFC517765C88C171EFD1B9E7FBADF74E5D5E222FC88B66D9D730F00707AE40A0714FA61955E8D6798F4F5C3A37AB27DCBF3CFED57B7AB5FCBF4AA0DE5E20C16008093235738A0D00F212742B134635D54FBB6E53B9F7FBC0D1F1E7E445DD7D3458DE7FE8D0100F84C72858319EEFABEBF5EFE488B45D39575571C621B3EFC7A711172A56DDBF0E30C5800004E895CE1504239847EB85A5C14F5BA6E8B9016F7DBF73E5E7C57F8F03157AA6ACA15D707030038257285431973A51B73A56CB2AACDC3A3DE6C9F3EFEE9F926BB5A7CAF42AE34A62B0000A746AE70280FD395EFD543AEBCEBF15CAB3C7A4D39E6CA4565BA0200708AE40A0733DC755D375D68785317BBD1F2F6FDE7B6F7AF091F3E4D57C6BBAF98AE00009C16B9C2A14CD395EBC5455A2C369390E20DDBFC99FD675FB32E6EAF973F4C5700004E925CE150A6735736F745F9B33D637E6C8C4FDDDFDCD7E5A7735700004E925CE150A6E9CAFD7D51EEAF3B5C6EB7CD27ED4FF775315D01003849728583D9DC77252B57E3A9F06DDEF465F3DFFD1F9FEEEFDE1D72B3ED765EF374BF1BF7AB26BB5E5C64C5B2AEDC770500E004C9150E66B81BFA2154C4EDEA57925D777DDDF675376CB6FDCE7678B27DEEF927DB24BBB959FD2CCB72BCAB7DDB8DD31500004E885CE180423F745D37454537349FFA08C5D2DC2C7FAEF39B902B4DDD845C19C6E18AE90A00C0E9902B1CD2E65AC66DD3DCAC7EADF3DB7E68FBBBF6B3B6A1826E57BF8AA2A8AB7ABC8A71E74830008053235738A0E96CFBB66DB362395E6EB8C94366848479B4ED9F3CF3F2F3613B9EB5B2FC91168BBF8E04532B0000A745AE7058D3E58C9BA659A5D7B7C9EF501A9B47FF2FDB502C8BE472955E9545395DC2B8EB3AA3150080D3235738B0CDF5C1BAB6ABEB7AB9FEB35C5F4EE391CD9CA47BA89777ECF7431B3E67B1BE2C8A623A6BC535C100004E955CE1E042488C67B0B46D5597A1346E93DF755B7C6CAE5235F922F91D9AA728F3E93030AD020070C2E40A07376C6CCEB96FABAA5AA5D7D7CB1FEBFCF6BD7395757E13DEB84AAFA6B94A6895A669C2C7BA7E3100C0A9922B7C89CD3D58A662A9AB3A2B9637AB5FB79BCB85B57DFDF24425BC20BCEC66F533BC3E2D965A0500E07CC815BEC83861D9164B5D5755B5CEC72B115F2D2E6E93DF49765D54EBBA2DFBA1ED861022655E25D3A58AAF1717A15542B1E479BEA7551C05060070BAE40A5FE7BF6269C762A9AB3AB4475E26D345C3AE973F42995C2DBE5F6DB637CB1FA15542C68417141BE1C52172EECFAD1F5345AB00009C38B9C297DA9EC7D2B55DD334D398A52AAB32C4485116FB941BE155E389F563AA68150080732157F872C3FDED2343758CF1B13936AC09FFABC679CB9825BBDB8D66A31B6FAFD20DE365C0940A00C059902BCC64733F96B15936DAC9667812CA64BB1F8C95D276D344651ACECCBD740000BE885C614E637B6C2E1A161EFDF3EE2B45A700009C19B94214EEBBE5C1D3FDB9170800C00CE40A00001029B9425C8AA2987B090000C442AE1097D56A35F712000088855C212E720500802DB9425CE40A00005B7285B8C8150000B6E40A71912B00006CC91522D20F7D922473AF02008058C81522D2F7FD7ABD9E7B150000C442AE1011B90200C02EB94244E40A0000BBE40A11912B0000EC922B4444AE0000B04BAE1091B66DB32C9B7B150000C442AE1091AEEDE40A00005B72858898AE0000B04BAE1011B90200C02EB94244E40A0000BBE40A11699B36CFF3B9570100402CE40A11A9EBBA288AB9570100402CE40A11699AC6740500802DB942444C570000D825578848D334452E570000B827578888E90A0000BBE40A11A9AAAA2CCBB9570100402CE40A1109AD5295D5DCAB0000201672858898AE0000B04BAE10917263EE550000100BB942444C570000D8255788C878EE4AE5DC150000EEC915225214455DD773AF02008058C8152292E7B95C0100604BAE1011D315000076C9152262BA0200C02EB942444C570000D82557884896656DDBCEBD0A000062215788885C010060975C2122699ACA150000B6E40A11315D010060975C617EC92A59FD2D4DD3B9170500C0FCE40AF3CBB26CB755CAA2CCF37CEE450100303FB9C2FCFAAEDFB64AB24A9CC10200C044AE1085749D4EB992659923C1000098C815A250D7F5942B7996577535F772000088825C2116C92A191F4932F742000088855C21166559AE56ABA228E65E080000B1902BC462B81B9255D2F7FDDC0B010020167205000088945C01000022255700008048C915000020527205000088945C010000222557789FA2E996797D9914BF93E2DB6DFABF87479CFB619161A98BBC4EAB6698FB4F0700C07BC915DEA41FEE42A55C2CB24D091CEBF626ABDACE7D5D00008E865CE17559DD865099E615BF5679E896B2E98AA61B86BB6133B388763BAD735D36DB5950E896B0FECFFDFB000070207285572CF27AFA96FF277CEB3FE6D144DBF5D76935FD2E57EBB27770180040F4E40A2F59E4F7DFEF93B2B98B605AF2EFDB905CDF17F7A7B5FCF39F070080C3922B3C2BAFDBF0B5FEFB6D16BEE2CFBD96CFD474FDE6D83647850100C44EAEB05FD70FD3F92AEB5399ABEC6EABB69F4E65A9DB932A310080132357D86F9157D3391E732FE45056C5784ECE6552CEBD1000009E2557D8631886E9CABF4DD7CF3E0939D0B61FC747F966C072C4D70F0000386D72853D8AA63B87C9C36D364E90968533580000222557D8E3261B2F08B6DA7C8F8F611272A0ED5465BF562E1106001029B9C21E974919BEC757A77541B0A7FACD316F178B6CEE850000B09F5C618F1FCBF19A60D34D21679F811C743B5D1FEC637F2500000E4DAEB0C7749EFDF485FEB47DDFFCA673AF020080FDE40A7BFC6F337338E864E3F2F2F28DCF3FF7CA4FD9865FF39B5C010088955C618F6F879F39840879F99F2EF7F9F4657CC16F0A00C087C915F698660E8798A83CE70373984FD9FECFB92B000011932BEC71A099C3EE78E4B9FDDD274D570000CE9C5C618F039DBBF2EA7465EFA4C5B92B0000674BAEB0C78CD395EDBEE90A000072853D0E77EECAA7EC7FE2D6B92B000031932BEC71B8E9CA73765FF3DCEB3F7D3D77A62B000071932BEC31FB7D5776B72FBFFE1FB7CE5D010088995C618F19EFBBB23B48315D0100387372853D0E74EECADD9BA72B2FEF7FE2D6B92B000031932BEC713E3387F3F94D01008E915C618F2F38772592AD73570000622657D8E3C7320FDFE3DB7E987B210737FDA673AF020080FDE40A7BFC5AE5DF6ED3B2E9EEE69E7E7CC174E5FB22FBE09F09008003932B6764BD5E274992A559505555DBB6CFBDF23AADC2F7F8AC7AF605A7A16EFB6FB7D9CF653EF7420000D84FAE9C91D5C672B95CED5827EBA7AF4CCA26E4CA555ADECD3DFD38E87655D4E1D7BCCDAAB7FE050100F85A72E58CACD7EBBF4265A3699BA7AF6CFB613C4AEA36EB4EFAF495CD316F5951B7732F040080FDE4CA291B8621D4485996699AEE864A9224D393FDD03FF7DEAB75198A659157B3CF400EB44DABF6DB6D7AB1C84E39C800008E9C5C39357DDF374D531445A891902579968732E9DAF1A4F9AAAA42ABA4EB34FC6B9EE7C3DD4B5FD4A7F33AC217FAA67B36698E573F0CD335C1D26ACF7009008048C89553D0755D5557A140429FACD7EBB053D77578F2D1CBDAAE4D564996672160DEF2B1D7691972E5C7723C242C8679C8676DFB7EB84C8AD02ABF93E22D7F070000E622578E55DBB6555565591612254DD3B2289BA6E9FB572621E1C5E1656FFC11E1BB7DF8423F5D3BABED4EE498A9505E97C9789CDB8FF1973AC1C11100C029912B47633C11A5F9EF4494102A613F44CBFDE0E330C217FAE91E2CDF17E9BA6C62988DFCCB36ABDB8B453EDD6BA56A1F4F9F0000888D5C895ADFF7755D174531DD3225CFF3F17E295DFB956B18EE8F0ACBC2B7FC902EABA23EBAB359427485D69AAE03B6F92D0A73150080A32057A2136A643ACA6B9D8C89125AA5AAAB578FF23AB4BC6E7FAEC6B9C4F498AEA9B5DDDF7D3EAAFDA76B0EDD32EF5F120080B7932BF31BEE86B66DCBB20C89321EE595662151DAA67DE12AC373299AEE36ABA66B6A4D938AA3D87E5F6437599555ED899C7F03007036E4CA3C1E9D8812B655598568997B5D00001011B932832CCDB627A23CBDDC30000030912B335827EBD9CF45010080F8C99519A4696AA8020000AF922B3308B9E23415000078955C99419EE76FBFB53C00009C2DB93283902B755DCFBD8A1885BFCCDC4B000020227265065555956539F72A62B45AADE65E02000011912B3328C75A29E75E458CE40A0000BBE4CA0C9AA671D4D35E720500805D72650672E539720500805D679D2BAB1D777F7F577EB4FF820FFCDCAEEDB22CFBF7F59F1EB90200C0AEB3CE95ADEDB7E4A7DDF2F43FDFF84F2FE8FA6EBD5E7FE08D274FAE0000B0EBDC7365EF5CE5D0B9D2F7BD5CD94BAE0000B04BAEFC952B4F77765FF3F418B00F7FBDF6BD7C2F7F16000076C995D5DD6BC780BD70668B5CF95CFE2C0000EC922BFB4F9ADF3B5D79FAAF1FFE7ABD5EAFFBBEFFD87B4F985C010060D7B9E7CAD6734785DD1DE660B0344DFB4EAE3C26570000D82557EE760BE485A3C23E77BA926559DBB61F7BEF09932B0000EC3AEB5CD93B2779FA8DF9D3AF0C16E479DE34CDC7DE7BC2E40A0000BBCE3A5776BD3C5D79C1C77E5C5114755DFFFBB24F8C5C010060D7B9E7CAD323C1769FDFEEBFF0F68FFDDCB22CABAAFAD87B4F985C010060D7B9E7CA5C42AB8462997B15D1912B0000EC922BF3A8EBBA288AB957111DB90200C02EB9328FA669B22C9B7B15D1912B0000EC922BF368DB56AE3C25570000D82557E6D1F7FD7ABD9E7B15D1912B0000EC922BF3902B7BC915000076C995D9F86AFE94BF090000BBE4CA6C925532DC0D73AF222E720500805D7265364992F47D3FF72AE222570000D825576693A669D77573AF222E720500805D7265362157DAB69D7B1571912B0000EC922BB329F2A2699AB9571117B90200C02EB9329B3CCFEBBA9E7B1571912B0000EC922BB3A9AAAA2CCBB9571117B90200C02EB9321BB9F2945C010060975C994DD334455ECCBD8AB8C815000076C995D9845CC9F37CEE55C445AE0000B04BAECCA66DDB2CCBE65E455CE40A0000BBE4CA6CBABE5BAFD773AF222E720500805D7265367DDFCB9547E40A0000BBE4CA9C7C3B7FC41F0400805D72654EBE9D3FE20F0200C02EB932A7F57ADDF7FDDCAB88885C010060975C99539AA65DD7CDBD8A88C815000076C995396559D6B6EDDCAB88885C010060975C99539EE74DD3CCBD8A88C815000076C99539154551D7F5DCAB88885C010060975C995359965555CDBD8A88C815000076C99539855609C532F72A2222570000D82557E654D775511473AF2222720500805D72654E4DD3645936F72A2222570000D82557E6D4B6AD5C099255B2FA5B9AA6732F0A0080F9C99539F57DBF5EAFE75EC5FC42B3AD96FFB54ABE31F7A20000989F5C99935C99745DB73B60C95277CF040060245766E66C8D49C8B6ED6845C2010030912B334B92A4288AAEEDE65EC8CC9ABAD9E68A5B67020030912B33EBFB3E7C3B4FD374EA96733E082AFC0596CBE57ABD1EEE86B9D702004014E44A2CFA61EC962CCBC2B7F63CCFDBA69D7B455FAD2CCBD56AE5463400006CC995E80CC3B0DB2D4DD39CCFB421E44AF8F5E75E050000B1902BF10A5FDC43AB846239C36E0100803BB9721442A5EC764B5DD7461000009C03B9724CA66E29F222744B9667E3BC45B7000070BAE4CAB1DACE5BB22CABEBBA1FFAB9570400009F4CAE1CBDB66D8BA258276BDD0200C089912BA763EA962449D6EB755DD57DAF5B0000386E72E504F55D3FCE5BD6EB344DC779CBA7764B51B7ABA2BE4C8ACBA4FCDF6DFAED368B79FB7BB3CE455EE575EB2C1F0080A323574E59D77553B7045559757DF7F18FEA87655E7F5F64DF6ED3FF3D3C8E6EFF3A2DDB4EB600001C0DB97216FABE2FCB325DA7A15BC24EC89877BD3DABDA1FCB7C9A57FC5AE5ABA22E9BAE6ABAF82F4B36AD33299BED2C28A44B58FFDCEB0200E04DE4CA7919BBA52AD3345D276FED96DBAC9A46137FD665DD8EC7954D957274DBB61BAED272FA5DAED665D7471F5B0000674FAE9CA9D02D5555856EC9B2EC85972DF26A9A48A465FB554B3BACB2E92E16E3992D974939F75A000078855CE15969D54C277E940FC77D9DC6B66EFBA95896B9A3C20000A22657D8AFEB87E97C95AC6AE75ECBE7ABDAEEFBE6EA614DE772CF0000F1922BECB7C8ABE91C8F18E62187D82EF33AFC82BF93E2E37F2300000E4CAEB047F83EFF6D731DAD131E3E8468B918AFCB9C4DD70F0000204272853DC257F86F0F938718262107DA4E173D735D63008068C915F698BEC7274533F7420EAB18AB6CBC93CCDC0B0100603FB9C21EBF9322E44AD18C7765997D0672B86D3F0CE1D7BC58C815008048C915F6F8B9B926587B0637529CAE0F36F72A0000D84FAEB0C774BB957E932BB3CF400EBAFDB6B9C9FDC7FE4A00001C9A5C618F6F1F9A395C5E5E4EDB47F6BEF28D2F7BF967EDDD79978FFDA600007C0DB9C21EFFDBCC1CDE3BA99882E1B9679EC649783EECECBE726FC63C7DD7EE273FFA84F7AE799A237DEE5F0F0080CF2257D8E3033387378E3B5EC892E7DEF2C27B5FFD71AF325D010088995C618F69E6F081B9CAEEACE3D13CE4D114E5E9EB9F7EF2F65FDFF8139FFB9C17B6FF73EE0A0040C4E40A7BBC77E6F0E8FC93DD41C7EE938F062377CFCC645E3812ECB98FDDDD7917D315008098C915F6F89773579E9BA8BC7A8ECADD9389CA73FBDB4F70EE0A00C069932BECF1E17357F6D6C8D3973DF79F4FDFBB7720F3F27CE65D4C570000622657D8E303E7AEEC4E48EE9E3FF364778AB2EBD589CAD3E9CAA3E73F3C5D912B0000D1922BECF1E199C3DEB9C7732FD8FB9A57A72B8FDE78F9F7892BEF9DB198AE0000C44CAEB0C77BCF5D79CB74E5D11465EF6B3E7665B0CBBF8F437BE39A9DBB0200103FB9C21EFF327378CB60E4D5D76C5FF9C2E73F7ACD0B9FF302D315008098C915F678EFB92BC7BB75EE0A0040CCE40A7B9CCFCCE17C7E530080632457D8E362317E896FBAFE6EEEE9C7A1B7E13775EE0A0040B4E40A7BFC4E8A902B75DBCFBD9083FB769B7D5F6473AF020080FDE40A7B5CA7E5B7DB745D3677734F3F0EBA0D3D16AAECE72AFFF01F0A008083922BEC91566DF81E7F9D56732FE4B05645FDED36BBCD4EFCD70400385E72853D9AAE9F2E0ED6F5C3EC3390C36D7FADF2F06B164DF7F1BF140000872457D8EF6A5D7EBBCD16F9C94E1EF27A9C20FD58E6C3DC2B0100E0397285FDA6F33A42B154ED387C987D12F2B9DB7E18A66B82259BF373000088935CE1593759359E89BECCBBFEA4261021572E932294D8EFA4987B2D0000BC44AEF0AC6118A62B1AFF5CE5D3458D679F8AFCFBB6DFFC52DF6ED38B45D6F6A77FA5660080A326577849DBF5BF5663B1842FF7EBE33F6EAAA8BBCD3160E3BD56A69B6002001033B9C22B8661B84ECB502CD38161ABA23EBAB359DA6E08CB9EAE03F66D332C32570100380A728537299B2EB4CAB7DB6C3AFF7EBAA6D6763FDAEDD3353BB71E00E088C815DE21ABDBDBAC9AAEA9F5BF8747FCFBDF17D94D5A8EE7DF0C2775CD00008093275700008048C915000020527205000088945C01000022255700008048C915000020527285E8144531DCB9E23000007285F8AC9375EFAEF30000C8152294A669D77573AF020080F9C915A21372A56DDBB9570100C0FCE40AD1C9F3BC699AB9570100C0FCE40AD109B952D7F5DCAB0000607E7285E894655955D5DCAB0000607E72858F5BAD56CFED3CF7E2175EB0556E7CC2FA0000387272858F7B39571EF5C9DB73A5AEEBA2283E77A900001C23B9C247AC76DC3D3F5DD97DC153CF7DB85C0100602257F8B8E7A62BAFCE585ED6B66D96659FBB5400008E915CE1E3762364778AF2E8057B472B2F748B5C0100602257F8B8B71C0CF6DCCE0BFABE5FAFD79FB95000008E935CE1231E4D489E3BD55EAE0000F02FE40A1FF76A8D3C3A5AEC8D07833DFD1C0000CE935CE1E39E9E61FFDCB161EF9AAEBCFD6500009C36B9C2C7ED3DD5FEEE337225499261183E77B500001C1DB9C247BC70EECADE03BDDE7B30D87ABDEEFBFE102B0700E088C81562946559DBB673AF02008099C9156224570000B8932BC429CFF3A669E65E05000033932BC4A8288ABAAEE75E05000033932BC4A82CCBAAAAE65E05000033932BC4A8DC987B150000CC4CAE109764953CBADE719AA6732F0A008079C815E29265D96AF95FABE41B732F0A008079C815E2D275DDEE80254B5DD11800E07CC915A2B35EAFB7A395B03FF7720000988D5C213A4DDD6C73C5E58C0100CE995C214649922C97CBF57A3DDC0D73AF050080D9C815625496E56AB52A8A62EE8500003027B942A442AE0C83D10A00C059932B000040A4E40A00001029B9020000444AAE10A9BEEF86BEEBFB36ECCCBD160000E6215788D1D0B759FA2B5BFF9CB67DD73AED1E00E00CC915A2D36F5A255D5F64EB1FE9FAC766FBB36B9BA11FEFC2A25B0000CE875C212EFDFD5C656C95A6598747D8C9D2F0188BA5EF7BF78D0400381F728588ECCE559A7A3D0C753F54A1581E662C3FDAB60EC5326CCCBD5800000E4EAE108BBFE62A9B5619866ADA6E672CE9FAE7B658E65E2F000007275788C2DEB9CA30349B5C3163010038537285F9ED9BABD4779B56B97B28163316008033245798D9DEB9CA43A5FC552C662C0000E746AE30A747D7017B18A4348FA62B662C0000E749AE309BBFE62A4D1252A4EFAB872CF9EBD1FFB73FBEC68C0500E04CC815E6B13B57A9EB64E89F6D95C78FFEBE58CC5800004E9E5C6106BB7395D02A7D5F767D19B679F63B3C5316D75393EC3EAAF226BCBEC87EF77D31BD3EBCD18C0500E0B4C915BEDADF739555DF955D57F45D115264BC7B7D783E1D8B655329E5F4A8CAEBE9F9B02DF2CBF1F5FDF8AEA64ECC5800004E985CE14BEDCE55AAB1558AB6CBBB87B9CAF4FC54326571D56D9A24A4CBEEF3613FBC782A9CF0DE103C662C0000A74AAEF07576E72A55B5EC42A88C8F226CB77395DD6D2896DDB9CAEE76F3AE62FA84502C662C00002749AEF045FE9AAB54CBB6CDDB366BBBB01D93A328AE76E7272FEF878C19DFBE79EFF439E103CD5800004E8F5CE12B0C7FCD551663A88C8FB134BAA95BDA4DB1EC9BB13CDADEB7CA7FEF1D779A36ABABE5A319CB9D5A01003872728583EBFB6E67AEB2689BB469D2A93136DBFFF68BFCCFAB73958777FDBDDD7C66553E9EB128160080A3265738B86108B9F2736C95F2BF56699B4D694CDDB2B32DF267672CE35C65F3AEA7DBF1BD0FC5B2099B9F4D53C57C12CB6AB57AFB3FAD363EFC394F7700008E855CE1E03667ADFC4C37A7AC349BA8D89DABB43B7392F0084DF2DCB92B45FE67EF4CE67E7F532CD5E690B0F0B39ABAEABA2EDA62D92D874715B15B174F4365F59ABD9FB3F7070100C44FAE707043BF99AE8C1392F1462BDB32E9FE3E77656A9597CF5D298AABDD776DDF3B7DE6D82AD32BD73FEBBA9C72259EE3C1DE1218CFFDD3EE6B5EFE118F3EE74EAE0000C74CAEF015FAAEDD9E55128AE5A14FC66B826DAFF1F5C25CE5AF194B71B5BD9ED8C37BC74F9BE62A53AB5455D1344DDBB62157F23CCFB22C4DD3A228CA8DBAA9DB8D19072F8F42E2E93FDD3DA997173EE7E57F7AB4235A0080232257F80A210CBAB649D7FFCD581EEEB8727FFB94E7EEAFF2DCFD5876DF7B7FEB95F4AF5609A6E94A10CAA46BBBBAAEABAA0AB952E445B69124C95402593A3D91857F9D5E135E3FBEABEB3EEB2FF0C683B81EEDEFBEFD2D1FF5E8273EFACC17B20700204E72852F32F443DBD63B339664A758CA67AE03765D3E733F96F15DE33DEFC74F081FB59DAB946548977A6C95B135BA37DE7D65D326A3A955AAB24AD3749AC94C5FF143D84CCF4C49338E68EAFB11CD78BCD9FBBD302D797A10D707F6EFFEAE94977F280040B4E40A5F65B8DB0C3AEAED8CA56942B1147D5F8647915F3E9AA254E5F5F44F215A1E9FC192FDEEC75619DFDB8456D9CE55CAE2AF56E93FED4E919BE9D0A6699A769AC014C5FD8866BD5E4F611076A667A6A3CEC26BA603D282479FB6779672F7E460ADE732E38D239A573F0700207E72852F320D3A1E8AE57EC6D234EB6ED3247D1FBEFEFFDECE4FAAF2A6EFABA1AFFACD632C9687B94A3EB5CAE65D7BE72AD3415C5F7F4DB0E9A8B37144535755394E69F23C9F6632DB7ED8DD0FC2ABA6B74C479D3DCD95A76396BBF74C579EDB010038167285AFB567C6B27E2893FB194B689561A81F3DA6194B489AA961C2B6A9D75F3057F95C2118429C84ED74D4593005CCF6A8B375B2DE56CDF49AE92DE1F7EA877EFB212F4F57B62FDBDD792E7E0000622657F852CFCD58C60219AAA795F2F431BD32BC259EB9CA5BEC3D3AEBE97F8626995E197E9DA955F23C9F7A667B6180E9A8B3F0CCF482B06DDA3D479D3D37A5912B00C011912BCCE1C98CA56DD29D5C69C2F6EEC976F3FCF89AB1558E6DAEB2EB2D539147CFEFFE67F835A7794B555553AEE4593E9D36F3E863C3F353D2845786D7EFFD71000031932BCCE099194BDA3F14CB4E9FFCB7DF6F5BE5A8E62AB398862D4DDB940FA6B368B6170608FF39F71A01005E275798CF8B3396939CABC4C38C0500380A7285D9BC3A63D94E57CC553E9D5C01008E825C616EAF9FC762AEF2F9E40A007014E40A337B79C662AE7220720500380A7285383C3F6331573904B902001C05B942149E9BB198AB1C885C01008E825C21264F662CFFCD552A7395CF24570080A3205788C89319CBCF691B5AA51953C55CE5D3C81500E028C815E2F33063699AAAA9ABBA2EC7FB1D9AAB7C2AB902001C05B94274B63396BEEBC74069BB69A862AEF289E40A007014E40AB11A36DDD28FDD72BF1DCC553E8D5C01008E825C216AC3DFE65ECEE9902B00C051902B708EE40A007014E40A51CBF37CEE259C26B902001C05B942D47CAB3E107F5800E028C815A2E65BF581F8C302004741AE1035DFAA0FC41F1600380A7285A8F9567D20FEB000C051902B44CDB7EA03F18705008E825C215E7DDFAF93F5DCAB384D720500380A7285788DB9B2962B0721570080A320578857C8952449E65EC569922B00C051902BC4CB74E570E40A007014E40AF172EECAE1C81500E028C815E2D5755D9AA673AFE2A42449B2FA9BBF30001033B942BCDAB6F565FA73A559BADB2A7991675936F7A200009E25578857C8155FA63F57DFF7DB56495649A8C1AEEDE65E1400C0B3E40AF1325D3984749D2E97CB902B2105FD790180C8C915E265BA7208755D27ABF10C96222FC2FEDCCB010078895C215EA62B07727F30987BDA0000D1932BC4ABAEEBA228E65EC509AACA2AE44A5996732F0400E015728578855CC9F37CEE559CA0E16E08B9D20FFDDC0B010078855C215EA62B0000674EAE102FD31500803327578897E90A00C099932BC4ABAA2AB9020070CEE40AF12ACB3214CBDCAB000060367285785565E562BB0000E74CAE102FD395A26E57457D99149749F9BFDBF4DB6D16F3F6F7669D8BBCCAEB7698FB4F07009C06B942BCCA8DB9573183AE1F9679FD7D917DBB4DFFF7F038BAFDEBB46C3BD90200FC13B942BCCE73BA9255ED8F653ECD2B7EADF25551974D5735DD10FD37FF699D49D96C6741215DC2FAE75E170070C4E40AF12A8AA2AECFEBCBEE6D564DA3893FEBB26EC7BBCE4F957274DBB61BAED272FA5DAED665D7471F5B004094E40AF12AF2A2699AB957F1751679354D24D2B29D7B2D9FA36CBA8BC57866CB6552CEBD1600E028C915E27556D395B46AA6133FCA87E3BE4E635BB7FD542CCBFC5CFE4F09007C22B942BCF23C3F93E94AD70FD3F92A59D5CEBD96CF57B5DDF7CDD5C39AAE9F7B2D00C091912BC4EB7CA62B8BBC9ACEF188611E7288ED32AFC32FF83B293EFE370200CE925C215E799EB74D3BF72A0E2E7C9FFFB6B98ED6090F1F42B45C8CD765CEA6EB070000BC915CE11D56ABD50BFFF9F28B3F20CBB2B66DFFF143E217BEC27F7B983CC4300939D076BAE899EB1A0300EF22577887977365F59AF7FEB8902B5DDBFDEBA2A3377D8F4F8A133F4BA718AB6CBC93CCDC0B01008E895CE1ADB6BDF1C614315D79A3DF491172A568C6309B7D0672B86D3F0CE1D7BC58C81500E01DE40A6FB2DB2A4F9FDC7DE6B3462B7767932B3F37D7046BCFE0468AD3F5C1E65E0500704CE40A6FB2B73AF6E6CAABFB6F7726B932DD6EA5DFE4CAEC3390836EBF6D6E72FFB1BF1200709EE40AEF3055C70BC393CFCD95F57ADDF7A77F21A96FFF3673B8BCBC7CFB3F5D6E7CF8739EEEBCCB3FFEA600C019922BBCD5B6555E7ECD271E0C7626B9F2BFCDCCE1C3538B500E7BF7EF1EA2627A7EF2E85F5FB6F7731E3DF3AEED3447FAD43F1E0070E2E40A6FF2748AF2EA79F61FAE94AD33C9950FCC1C5E088CE75EB0F7435EFE118F3EE7CE740500F87272858F78F584FBBBB74D635E7626B932CD1CFE71BAF26872F2DC74E5E98CE5B9C9CC739FB3FBCC7B672CFF73EE0A00F04E728577D80E4C5EC895A7E7B17CB858CE2457DE3B7378CB415C777F9FA6F268F0F2968F7AF4131F7DE673139BCFFD4D0100E40A6FF2E8C8AEE7CEB37FE154FB0F444B9224C370FA97F7FDC473571E3DBF9DA55C3E737ECB5BF6EF1EE2C4B92B00C0D7932BC4EB1F4F7D3916FF3273D83B4BB9FBFB60ADBD3BBBEF7A7544F3EAE7BC91E90A00F05E7285789D49AE7CF8DC954775F1F46C93CBBFCF5DB97B321579FB74E5D1F31F9EAEC81500E05DE40AF13A935CF9D8CCE1D1FC64F7C9E75EF37424F2817357EEEE1EC7CFDB99AE0000EF255788D799E4CA7BCF5DD99E4972F7E2B464EF2B5F988A5CBEEDCA60BB9FF3DE198B73570080F7922BC4EB4C72E51FCF5D79752AF2E8F9A72FDB7DF1739FFFE8357B7FDCAB4C570080F7922B44AAEFFBF57A3DF72ABEC23FDE77E588B6CE5D0100DE4BAE10A9F3C995F399399CCF6F0A007C16B942A4CE27572E16E397F8A61B6F8819C30CE470DBF09B3A7705007817B942A4CE27577E2745C895BAEDE75EC8C17DBBCDBE2FB2B95701001C13B942A4CE2757AED3F2DB6DBA2E9BBBB9A71F07DD861E0B55F673957FF80F05009C21B942A4BAAE4BD374EE557C85B46AC3F7F8EBB49A7B2187B52AEA6FB7D96D76E2BF2600F0B9E40A916ADB36CBCEE2C0A1A6EBA78B8375FD30FB0CE470DB5FAB3CFC9A45D37DFC2F05009C1FB942A4BAB63B935C09AED6E5B7DB6C919FECE421AFC709D28F653ECCBD1200E0B8C81522753ED395603AAF23144BD58EC387D927219FBBED8761BA2658B2393F0700E0EDE40A913AAB5C096EB26A3C137D9977FD494D2042AE5C264528B1DF4931F75A0080E3235788D4B9E5CA300CD3158D7FAEF2E9A2C6B34F45FE7DDB6F7EA96FB7E9C5226BFBD3BF523300F0E9E40A916A9AA6C8CFEBFF1FDF76FDAFD5582CE1CBFDFAF88F9B2AEA6E730CD878AF95E926980000EF255788545DD745715EB972B799B15CA7652896E9C0B055511FDDD92C6D3784654FD701FBB6191699AB00001F26578854D334797EA6B7142C9B2EB4CAB7DB6C3AFF7EBAA6D6763FDAEDD3353BB71E00F8477285489DE774655756B7B759355D53EB7F0F8FF8F7BF2FB29BB41CCFBF194EEA9A0100C02CE40A913AC3735700007844AE10A9AAAACAB29C7B150000CC49AE1029B90200805C2152A155AAB29A7B150000CC49AE1029D3150000E40A912A37E65E05000073922B44CA74E5A0CEF69E3600C071912B442A7C9FAEEB7AEE559CACD56A35F71200005E27578854511472E570E40A007014E40A91325D3928B902001C05B942A44C570E4AAE00004741AE1029D39583922B00C051902B442AE44AD33473AFE264C91500E028C8152295A669DBB673AFE264C91500E028C815229565995C391CB902001C05B942A44C570E4AAE00004741AE10976495ACFE16BA65EE459D20B902001C05B9425CB22C5B2DFF6B957C63EE459D20B902001C05B9425CBAAEDB1DB064A933580E42AE00004741AE109DF57A7DDF2A5916F6E75ECE69922B00C051902B44A7A99B6DAEB853E481C81500E028C815629424C972B95C27EBE16E987B2DA749AE00004741AE10A3B22C935592174EB23F14B902001C05B942A4C2F7E9BEEFE75EC5C9922B00C051902B708EE40A007014E40A9C23B902001C05B902E748AE00004741AEC039922B00C051902B708EE40A007014E40A9C23B902001C05B9424C86BBB6AEDBB2AAD26CFB68CAAAABEBC1458D3F955C01008E825C2102C3506559767DBBB8F8B9F8FE63EF6379F133BDBA0EF5D2775DA89A6170B7FB7F22570080A3205798592890D5CFDF8BEF53A8FC0CC5925CFE59FFB9CA6F16D9CDEDFACF75F2FBCFF2E2D7B65BC28BCB753AF48362F917720500380A7285D9744D1B52E4BE432E7E863869B2ECAE6DEFBAEED16368DB26CBC30B960FE397D5AFCBB6AAFB7EAC963BD9F27E720500380A7285793445B9FCF16B0A95FC763134CDA64CFA97B743DDE4378BED1CA6CAF2502C63AE289677922B00C051902BCC20B4CA749A4AF2FB4F57564FC7292F3FFAAA5AFDBA9CC62CA158BAAE1B06C786BD8F5C01008E825CE1AB3565351DD3955EDD6C0EFD7A65A2B27FDB76EBABEBE98C9769C6E2A8B0BDC29FA5DDA8EBBA2CCBAA1A2F6A10244932F7D200005E2757F8525DD34EC780ADFF5CED3D4DE55D8FE4CFD57438595355673B6309A93605C9582365551445A891344D4390AC56ABB00DFBE199F07CB931BDB877616800E018C815BED4746EFDEAD7E5E664953D9393BEAEAB649D5EDDA47FAE43D2846D76735BAFD3FD3396A69DAE2A369E793F7D053FC55A69BBF17F4D13A2AC0ABD91E7F9381F49B3D5C67ABD9E0626D3BFD6751DFE14E1F567586E00C0E9912B7C9D3249A761C8FEF3559A3694C9B3F75DF9F1AB5C257BCF63595C8C2FC896AB2EFCE77454D8517974BC5630CD43A6F148906E844A99E627A15BDA4D91CCBD70008083932B7C95E16E3A0CAC582C9FCE49FAB2DAFCEBEE6D22F7EC8FA7BB34EDA3F7860F9C7AA6A99B7E0C96E80E73FAEB78ADEAFE78AD6D9084EDF49FE1F96942324E531CAF05002057F832559A4DA395F130B0B6BD6BBBEDB62B1F2E6AFC8647F2FB72F7BD611B3E703A773F4F92E95BFE0B0396F04F210CF23CFFDCDF6ED3176DD334D378247CFE341299C623539084FFACCAFF8ED70A8E6E100400F0C5E40A5F64FDE77A2C8A9BC5D084C668A76899F64381BC3A57D9DD1FE7330FEF1D3FE7E128B2D5EF3F6DD3BE70CE7DA885D583772DFEB9EB6BADD7EBE9D3B2F1E8ADECFE78ADCAF15A00009F43AEF02586612A8D26CB86BA19EA3A6CFB715B97CBD51BE72ABB8FB628361F72FF394D964F3D535775D7764FCFB9AF9B7A7B2AC8DE5C717D2D008008C915BE425BD5D37DE887AAEAAB6AA8EACD76DCDF5CDAEBAD7395ED7E7EB378F439D3F16065963F3A1E2CEC6F6720BB5C5F0B00207E7285AF50E7C5C33DECCBBE2CBBE27E5BAFD30F8C56C613EB7FFEEA8B87CFD97CE66A3CA2EC479EACEF8F07EBEF8F07BBAF93E5E35C71BC160040FCE40A5F613ACF3EBDBAEE8AA2CB8BED76BAA8D7BBE62ADBFDDDCF09DBFB73639649E890E98AC6D38FEEC75BB9D4799E4F57045EAFD7C92A79EFB92B0000CC42AEF015A65CC9AE6FDB2C6BF37CBBCDAF6F3E365D098F3A59EF7E5A68A1C5E6EE2BD3D864EFF5C19A76BC72D7582C4932CBDF01008077912B7C85324D17DF7FA6D737635A8C8F7CDAC9C65C79F75C65DAA99264FB39E3475DDDDC4F57EA66EFD9F600001C1DB9C257D81E0CF668BAB27330D8FB2F0E96E5BB9FB6FE73F5EA74050080E32257F80A9B53ED7F8EA7DAFF7DEECACEA9F6EF9BB1AC7EFE7E74EECAE6E62D3F8A646DBA02007032E40A5F617321E31FCB8B9F212DB6D7F2EACA717FF9D7858CDFFAC8AE6F76AF30161E8B8BF1F922CB4C5700004E865CE12B0C7D3FDD17A55EA78FEE9752AD920F9CBB3266CFCEE76CA634E3F35559FD375D0100E0C8C915BEC470974CE796DCDC3EDCCFFEBF7BDB4FC771BDFD512C96DBF74EF7B6CFAE6F179BFBBA84FC99A62BDBFBAE000070BCE40A5F62B82B37A7A92C7FFCEAABFA2EE444D36CB66DD8B645119E7FE35C657D79B5FBDEB01F7265B119DDA48B655DD72157FA71B862BA020070F4E40A5FA4EFBAA949F2DB45C88CBBB6DBDD866259FD7AFD24966938F3E8BDE1C9F15F2F7E5665197265BC557DD719AD00009C00B9C25719EEF2E934958B1F7D59DD75DD5DD7EF6E87A6F9FBBAC67FCD55563F7FD7EBF4E9BBBAB29ACE8A496F9775553B120C00E094C815BE48E887BEEF57BFC6D35456BF7EDF35EDA6371E3F86A6AD56497EB3585F5EADFF5C856D68983ACB9E797133CD6442CC949BD14AC895AE7315630080132157F83AA158DABA5EFE188721C99FAB87EAE89FD9BEFCAFE3763A7D7FF9E3579165F7ADB2B92698D10A00C069902B7CA1E12EB4C4E69691E3215EEB502CCFCC585E7D0C4D33DDC67EF1FD679EACEBAAFEEFAC15478201009C0AB9C2D7DA144B95E5DB9BD38F170A7B6D8AF268DB57D56A7373C9E5C54EAB345A0500E0D4C815BED6707F12CB582C9B53E417179BEB7D35CDDB862A6D7A7333BD71F9E3576895AAAAA65671277B0080D32357F8720FC5D254F574E6FD664EF22BBDBE69B27CBC36F1BEF358C23F8DF782BCB8BF5C5878E378BECAC35C45AB00009C24B9C20C868DAEEB4266E4AB64F71E91CB8B9F2145D67FAEB29BDBF048FE5CAD7E5F6E2B65BABF4AB65C8DD7017BD42AFDE06A6000002746AE309387194B8896A66EF2641DCA6479F1FCFDEC2F7E2697572154AA4DA834E365C09AE9DC7A7315008053255798CD3463998A651C91346D5D555596E7EB3464C9F651ACD322CBAA32FC5BD58C03954DA96CAE59FC5FABA815008053245798DBE65A61433F1E1B160A64EA962948A611CAFDB669A6E7DB8D7EEC947E0A9EB97F0100000E45AE1081CD8161A158C604E9C661CB942E53BDDC6F77F4BD560100380B7285584CC7746D8F10BBAF97A94C36FB53D24CAF997BB100007C05B9427476BB65BBBFDD0200703EE40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B902000044EAFFC793AAD70BE9D81C0000000049454E44AE426082, '1', 'leave2.png');
+INSERT INTO `jbpm4_lob` VALUES ('22', '0', 0x3C3F786D6C2076657273696F6E3D22312E302220656E636F64696E673D225554462D38223F3E0D0A0D0A3C70726F63657373206E616D653D226C656176652220786D6C6E733D22687474703A2F2F6A62706D2E6F72672F342E342F6A70646C223E0D0A2020203C737461727420673D223139362C32352C34382C343822206E616D653D22737461727431223E0D0A2020202020203C7472616E736974696F6E20746F3D22E794B3E8AFB7222F3E0D0A2020203C2F73746172743E0D0A2020203C7461736B2061737369676E65653D22237B6F776E65727D2220666F726D3D22726571756573742E6A73702220673D223137322C3131382C39322C353222206E616D653D22E794B3E8AFB7223E0D0A2020202020203C7472616E736974696F6E20746F3D22E7BB8FE79086E5AEA1E689B9222F3E0D0A2020203C2F7461736B3E0D0A2020203C7461736B2061737369676E65653D226D616E616765722220666F726D3D226D616E616765722E68746D6C2220673D223137322C3232352C39322C353222206E616D653D22E7BB8FE79086E5AEA1E689B9223E0D0A2020202020203C7472616E736974696F6E20673D222D33322C2D3822206E616D653D22E689B9E587862220746F3D226578636C757369766531222F3E0D0A2020202020203C7472616E736974696F6E20673D223132382C3232313B3132342C3136353A2D34322C2D313822206E616D653D22E9A9B3E59B9E2220746F3D22E794B3E8AFB7222F3E0D0A2020203C2F7461736B3E0D0A2020203C6465636973696F6E20657870723D22237B646179203E2033203F2027E88081E69DBFE5AEA1E689B927203A2027E7BB93E69D9F277D2220673D223230302C3330382C34382C343822206E616D653D226578636C757369766531223E0D0A2020202020203C7472616E736974696F6E20673D222D33392C2D313022206E616D653D22E7BB93E69D9F2220746F3D22656E6431222F3E0D0A2020202020203C7472616E736974696F6E20673D223333392C3334323A2D34382C2D313122206E616D653D22E88081E69DBFE5AEA1E689B92220746F3D22E88081E69DBFE5AEA1E689B9222F3E0D0A2020203C2F6465636973696F6E3E0D0A2020203C7461736B2061737369676E65653D22626F73732220666F726D3D22626F73732E68746D6C2220673D223239342C3337352C39322C353222206E616D653D22E88081E69DBFE5AEA1E689B9223E0D0A2020202020203C7472616E736974696F6E20673D223333392C3435373A2220746F3D22656E6431222F3E0D0A2020203C2F7461736B3E0D0A2020203C656E6420673D223139392C3434352C34382C343822206E616D653D22656E6431222F3E0D0A3C2F70726F636573733E, '21', 'leave2.jpdl.xml');
+INSERT INTO `jbpm4_lob` VALUES ('23', '0', 0x89504E470D0A1A0A0000000D494844520000043A000002490802000000C429C0BB0000342A49444154789CEDDD2D78A3DCDA80D123478EAC1C3972E4C8CA9195959595919191C84824128944229148241289AC3C9BD0E6CDB4E9EF34652759EBE4E2E2CD24E96E3F93FB7BF8F9DF1D00004094FE37F702000000F6932B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40AB11886E16ED8B31D1F00009C25B9C2AC86BBA25A27D9F5EDEAD7F5F2C7D5E2FBD5E262DA5E2F2F6E93DFABF4BAA8D3BEEF878DB9970B00C097922BCC23B4479A2F6E369512B2649DDDE455D274653FB4E11176361973B3487E5F2F2E42CCACF3DB295A0C5B0000CE875C610659B90A0572B3FC1922A4EDABE1AE9B1EFDC3CEEE7EDBD7EBFCE666F533B44D5EAE4C5A0000CE875CE1ABADD2EB9BE58F102AC35DBF0992B76EC35BAE973F92ECBAEB3A63160080732057F83A7DDF2DD6978BE477D5E4CFCD525EDEAFDAFC36F9BD5CFF69DB66E8CD5800004E9C5CE1AB0C772133C2A3BF6BDF3B57F97BDB4D9F33CE58140B00C049932B7C89E16E955E2D92DFFDD07E6CAEB2BB1F82E736F99DA4D78A0500E0B4C915BE42562E6F963F36C780FDCB5CE5BF6DDD16D7CB1F59B9721E0B00C009932B1C5C3FF49B2B11DFFCFB5C65777F9DDFDEAC7EB56D7B5F2C00009C1CB9C2618590D874C5CF6D6F6CCE5DD9BBDFBDF7F9E97E2C5DDBF57D6FC00200707AE40A87157225B4CA1815431362A31BDACD76DCEFFF793FC96E42B1344DD38FC1D2CFFDBB0200F0C9E40A8734DCE55572BDFC517765C88C171EFD1B9E7FBADF74E5D5E222FC88B66D9D730F00707AE40A0714FA61955E8D6798F4F5C3A37AB27DCBF3CFED57B7AB5FCBF4AA0DE5E20C16008093235738A0D00F212742B134635D54FBB6E53B9F7FBC0D1F1E7E445DD7D3458DE7FE8D0100F84C72858319EEFABEBF5EFE488B45D39575571C621B3EFC7A711172A56DDBF0E30C5800004E895CE1504239847EB85A5C14F5BA6E8B9016F7DBF73E5E7C57F8F03157AA6ACA15D707030038257285431973A51B73A56CB2AACDC3A3DE6C9F3EFEE9F926BB5A7CAF42AE34A62B0000A746AE70280FD395EFD543AEBCEBF15CAB3C7A4D39E6CA4565BA0200708AE40A0733DC755D375D68785317BBD1F2F6FDE7B6F7AF091F3E4D57C6BBAF98AE00009C16B9C2A14CD395EBC5455A2C369390E20DDBFC99FD675FB32E6EAF973F4C5700004E925CE150A6735736F745F9B33D637E6C8C4FDDDFDCD7E5A7735700004E925CE150A6E9CAFD7D51EEAF3B5C6EB7CD27ED4FF775315D01003849728583D9DC77252B57E3A9F06DDEF465F3DFFD1F9FEEEFDE1D72B3ED765EF374BF1BF7AB26BB5E5C64C5B2AEDC770500E004C9150E66B81BFA2154C4EDEA57925D777DDDF675376CB6FDCE7678B27DEEF927DB24BBB959FD2CCB72BCAB7DDB8DD31500004E885CE180423F745D37454537349FFA08C5D2DC2C7FAEF39B902B4DDD845C19C6E18AE90A00C0E9902B1CD2E65AC66DD3DCAC7EADF3DB7E68FBBBF6B3B6A1826E57BF8AA2A8AB7ABC8A71E74830008053235738A0E96CFBB66DB362395E6EB8C94366848479B4ED9F3CF3F2F3613B9EB5B2FC91168BBF8E04532B0000A745AE7058D3E58C9BA659A5D7B7C9EF501A9B47FF2FDB502C8BE472955E9545395DC2B8EB3AA3150080D3235738B0CDF5C1BAB6ABEB7AB9FEB35C5F4EE391CD9CA47BA89777ECF7431B3E67B1BE2C8A623A6BC535C100004E955CE1E042488C67B0B46D5597A1346E93DF755B7C6CAE5235F922F91D9AA728F3E93030AD020070C2E40A07376C6CCEB96FABAA5AA5D7D7CB1FEBFCF6BD7395757E13DEB84AAFA6B94A6895A669C2C7BA7E3100C0A9922B7C89CD3D58A662A9AB3A2B9637AB5FB79BCB85B57DFDF24425BC20BCEC66F533BC3E2D965A0500E07CC815BEC83861D9164B5D5755B5CEC72B115F2D2E6E93DF49765D54EBBA2DFBA1ED861022655E25D3A58AAF1717A15542B1E479BEA7551C05060070BAE40A5FE7BF6269C762A9AB3AB4475E26D345C3AE973F42995C2DBE5F6DB637CB1FA15542C68417141BE1C52172EECFAD1F5345AB00009C38B9C297DA9EC7D2B55DD334D398A52AAB32C4485116FB941BE155E389F563AA68150080732157F872C3FDED2343758CF1B13936AC09FFABC679CB9825BBDB8D66A31B6FAFD20DE365C0940A00C059902BCC64733F96B15936DAC9667812CA64BB1F8C95D276D344651ACECCBD740000BE885C614E637B6C2E1A161EFDF3EE2B45A700009C19B94214EEBBE5C1D3FDB9170800C00CE40A00001029B9425C8AA2987B090000C442AE1097D56A35F712000088855C212E720500802DB9425CE40A00005B7285B8C8150000B6E40A71912B00006CC91522D20F7D922473AF02008058C81522D2F7FD7ABD9E7B150000C442AE1011B90200C02EB94244E40A0000BBE40A11912B0000EC922B4444AE0000B04BAE1091B66DB32C9B7B150000C442AE1091AEEDE40A00005B72858898AE0000B04BAE1011B90200C02EB94244E40A0000BBE40A11699B36CFF3B9570100402CE40A11A9EBBA288AB9570100402CE40A11699AC6740500802DB942444C570000D825578848D334452E570000B827578888E90A0000BBE40A11A9AAAA2CCBB9570100402CE40A1109AD5295D5DCAB0000201672858898AE0000B04BAE10917263EE550000100BB942444C570000D8255788C878EE4AE5DC150000EEC915225214455DD773AF02008058C8152292E7B95C0100604BAE1011D315000076C9152262BA0200C02EB942444C570000D82557884896656DDBCEBD0A000062215788885C010060975C2122699ACA150000B6E40A11315D010060975C617EC92A59FD2D4DD3B9170500C0FCE40AF3CBB26CB755CAA2CCF37CEE450100303FB9C2FCFAAEDFB64AB24A9CC10200C044AE1085749D4EB992659923C1000098C815A250D7F5942B7996577535F772000088825C2116C92A191F4932F742000088855C21166559AE56ABA228E65E080000B1902BC462B81B9255D2F7FDDC0B010020167205000088945C01000022255700008048C915000020527205000088945C010000222557789FA2E996797D9914BF93E2DB6DFABF87479CFB619161A98BBC4EAB6698FB4F0700C07BC915DEA41FEE42A55C2CB24D091CEBF626ABDACE7D5D00008E865CE17559DD865099E615BF5679E896B2E98AA61B86BB6133B388763BAD735D36DB5950E896B0FECFFDFB000070207285572CF27AFA96FF277CEB3FE6D144DBF5D76935FD2E57EBB27770180040F4E40A2F59E4F7DFEF93B2B98B605AF2EFDB905CDF17F7A7B5FCF39F070080C3922B3C2BAFDBF0B5FEFB6D16BEE2CFBD96CFD474FDE6D83647850100C44EAEB05FD70FD3F92AEB5399ABEC6EABB69F4E65A9DB932A310080132357D86F9157D3391E732FE45056C5784ECE6552CEBD1000009E2557D8631886E9CABF4DD7CF3E0939D0B61FC747F966C072C4D70F0000386D72853D8AA63B87C9C36D364E90968533580000222557D8E3261B2F08B6DA7C8F8F611272A0ED5465BF562E1106001029B9C21E974919BEC757A77541B0A7FACD316F178B6CEE850000B09F5C618F1FCBF19A60D34D21679F811C743B5D1FEC637F2500000E4DAEB0C7749EFDF485FEB47DDFFCA673AF020080FDE40A7BFC6F337338E864E3F2F2F28DCF3FF7CA4FD9865FF39B5C010088955C618F6F879F39840879F99F2EF7F9F4657CC16F0A00C087C915F698660E8798A83CE70373984FD9FECFB92B000011932BEC71A099C3EE78E4B9FDDD274D570000CE9C5C618F039DBBF2EA7465EFA4C5B92B0000674BAEB0C78CD395EDBEE90A000072853D0E77EECAA7EC7FE2D6B92B000031932BEC71B8E9CA73765FF3DCEB3F7D3D77A62B000071932BEC31FB7D5776B72FBFFE1FB7CE5D010088995C618F19EFBBB23B48315D0100387372853D0E74EECADD9BA72B2FEF7FE2D6B92B000031932BEC713E3387F3F94D01008E915C618F2F38772592AD73570000622657D8E3C7320FDFE3DB7E987B210737FDA673AF020080FDE40A7BFC5AE5DF6ED3B2E9EEE69E7E7CC174E5FB22FBE09F09008003932B6764BD5E274992A559505555DBB6CFBDF23AADC2F7F8AC7AF605A7A16EFB6FB7D9CF653EF7420000D84FAE9C91D5C672B95CED5827EBA7AF4CCA26E4CA555ADECD3DFD38E87655D4E1D7BCCDAAB7FE050100F85A72E58CACD7EBBF4265A3699BA7AF6CFB613C4AEA36EB4EFAF495CD316F5951B7732F040080FDE4CA291B8621D4485996699AEE864A9224D393FDD03FF7DEAB75198A659157B3CF400EB44DABF6DB6D7AB1C84E39C800008E9C5C39357DDF374D531445A891902579968732E9DAF1A4F9AAAA42ABA4EB34FC6B9EE7C3DD4B5FD4A7F33AC217FAA67B36698E573F0CD335C1D26ACF7009008048C89553D0755D5557A140429FACD7EBB053D77578F2D1CBDAAE4D564996672160DEF2B1D7691972E5C7723C242C8679C8676DFB7EB84C8AD02ABF93E22D7F070000E622578E55DBB6555565591612254DD3B2289BA6E9FB572621E1C5E1656FFC11E1BB7DF8423F5D3BABED4EE498A9505E97C9789CDB8FF1973AC1C11100C029912B47633C11A5F9EF4494102A613F44CBFDE0E330C217FAE91E2CDF17E9BA6C62988DFCCB36ABDB8B453EDD6BA56A1F4F9F0000888D5C895ADFF7755D174531DD3225CFF3F17E295DFB956B18EE8F0ACBC2B7FC902EABA23EBAB359427485D69AAE03B6F92D0A73150080A32057A2136A643ACA6B9D8C89125AA5AAAB578FF23AB4BC6E7FAEC6B9C4F498AEA9B5DDDF7D3EAAFDA76B0EDD32EF5F120080B7932BF31BEE86B66DCBB20C89321EE595662151DAA67DE12AC373299AEE36ABA66B6A4D938AA3D87E5F6437599555ED899C7F03007036E4CA3C1E9D8812B655598568997B5D00001011B932832CCDB627A23CBDDC30000030912B335827EBD9CF45010080F8C99519A4696AA8020000AF922B3308B9E23415000078955C99419EE76FBFB53C00009C2DB93283902B755DCFBD8A1885BFCCDC4B000020227265065555956539F72A62B45AADE65E02000011912B3328C75A29E75E458CE40A0000BBE4CA0C9AA671D4D35E720500805D72650672E539720500805D679D2BAB1D777F7F577EB4FF820FFCDCAEEDB22CFBF7F59F1EB90200C0AEB3CE95ADEDB7E4A7DDF2F43FDFF84F2FE8FA6EBD5E7FE08D274FAE0000B0EBDC7365EF5CE5D0B9D2F7BD5CD94BAE0000B04BAEFC952B4F77765FF3F418B00F7FBDF6BD7C2F7F16000076C995D5DD6BC780BD70668B5CF95CFE2C0000EC922BFB4F9ADF3B5D79FAAF1FFE7ABD5EAFFBBEFFD87B4F985C010060D7B9E7CAD6734785DD1DE660B0344DFB4EAE3C26570000D82557EE760BE485A3C23E77BA926559DBB61F7BEF09932B0000EC3AEB5CD93B2779FA8DF9D3AF0C16E479DE34CDC7DE7BC2E40A0000BBCE3A5776BD3C5D79C1C77E5C5114755DFFFBB24F8C5C010060D7B9E7CAD323C1769FDFEEBFF0F68FFDDCB22CABAAFAD87B4F985C010060D7B9E7CA5C42AB8462997B15D1912B0000EC922BF3A8EBBA288AB957111DB90200C02EB9328FA669B22C9B7B15D1912B0000EC922BF368DB56AE3C25570000D82557E6D1F7FD7ABD9E7B15D1912B0000EC922BF3902B7BC915000076C995D9F86AFE94BF090000BBE4CA6C925532DC0D73AF222E720500805D7265364992F47D3FF72AE222570000D825576693A669D77573AF222E720500805D7265362157DAB69D7B1571912B0000EC922BB329F2A2699AB9571117B90200C02EB9329B3CCFEBBA9E7B1571912B0000EC922BB3A9AAAA2CCBB9571117B90200C02EB9321BB9F2945C010060975C994DD334455ECCBD8AB8C815000076C995D9845CC9F37CEE55C445AE0000B04BAECCA66DDB2CCBE65E455CE40A0000BBE4CA6CBABE5BAFD773AF222E720500805D7265367DDFCB9547E40A0000BBE4CA9C7C3B7FC41F0400805D72654EBE9D3FE20F0200C02EB932A7F57ADDF7FDDCAB88885C010060975C99539AA65DD7CDBD8A88C815000076C995396559D6B6EDDCAB88885C010060975C99539EE74DD3CCBD8A88C815000076C99539154551D7F5DCAB88885C010060975C995359965555CDBD8A88C815000076C99539855609C532F72A2222570000D82557E654D775511473AF2222720500805D72654E4DD3645936F72A2222570000D82557E6D4B6AD5C099255B2FA5B9AA6732F0A0080F9C99539F57DBF5EAFE75EC5FC42B3AD96FFB54ABE31F7A20000989F5C99935C99745DB73B60C95277CF040060245766E66C8D49C8B6ED6845C2010030912B334B92A4288AAEEDE65EC8CC9ABAD9E68A5B67020030912B33EBFB3E7C3B4FD374EA96733E082AFC0596CBE57ABD1EEE86B9D702004014E44A2CFA61EC962CCBC2B7F63CCFDBA69D7B455FAD2CCBD56AE5463400006CC995E80CC3B0DB2D4DD39CCFB421E44AF8F5E75E050000B1902BF10A5FDC43AB846239C36E0100803BB9721442A5EC764B5DD7461000009C03B9724CA66E29F222744B9667E3BC45B7000070BAE4CAB1DACE5BB22CABEBBA1FFAB9570400009F4CAE1CBDB66D8BA258276BDD0200C089912BA763EA962449D6EB755DD57DAF5B0000386E72E504F55D3FCE5BD6EB344DC779CBA7764B51B7ABA2BE4C8ACBA4FCDF6DFAED368B79FB7BB3CE455EE575EB2C1F0080A323574E59D77553B7045559757DF7F18FEA87655E7F5F64DF6ED3FF3D3C8E6EFF3A2DDB4EB600001C0DB97216FABE2FCB325DA7A15BC24EC89877BD3DABDA1FCB7C9A57FC5AE5ABA22E9BAE6ABAF82F4B36AD33299BED2C28A44B58FFDCEB0200E04DE4CA7919BBA52AD3345D276FED96DBAC9A46137FD665DD8EC7954D957274DBB61BAED272FA5DAED665D7471F5B0000674FAE9CA9D02D5555856EC9B2EC85972DF26A9A48A465FB554B3BACB2E92E16E3992D974939F75A000078855CE15969D54C277E940FC77D9DC6B66EFBA95896B9A3C20000A22657D8AFEB87E97C95AC6AE75ECBE7ABDAEEFBE6EA614DE772CF0000F1922BECB7C8ABE91C8F18E62187D82EF33AFC82BF93E2E37F2300000E4CAEB047F83EFF6D731DAD131E3E8468B918AFCB9C4DD70F0000204272853DC257F86F0F938718262107DA4E173D735D63008068C915F698BEC7274533F7420EAB18AB6CBC93CCDC0B0100603FB9C21EBF9322E44AD18C7765997D0672B86D3F0CE1D7BC58C815008048C915F6F8B9B926587B0637529CAE0F36F72A0000D84FAEB0C774BB957E932BB3CF400EBAFDB6B9C9FDC7FE4A00001C9A5C618F6F1F9A395C5E5E4EDB47F6BEF28D2F7BF967EDDD79978FFDA600007C0DB9C21EFFDBCC1CDE3BA99882E1B9679EC649783EECECBE726FC63C7DD7EE273FFA84F7AE799A237DEE5F0F0080CF2257D8E3033387378E3B5EC892E7DEF2C27B5FFD71AF325D010088995C618F69E6F081B9CAEEACE3D13CE4D114E5E9EB9F7EF2F65FDFF8139FFB9C17B6FF73EE0A0040C4E40A7BBC77E6F0E8FC93DD41C7EE938F062377CFCC645E3812ECB98FDDDD7917D315008098C915F6F89773579E9BA8BC7A8ECADD9389CA73FBDB4F70EE0A00C069932BECF1E17357F6D6C8D3973DF79F4FDFBB7720F3F27CE65D4C570000622657D8E303E7AEEC4E48EE9E3FF364778AB2EBD589CAD3E9CAA3E73F3C5D912B0000D1922BECF1E199C3DEB9C7732FD8FB9A57A72B8FDE78F9F7892BEF9DB198AE0000C44CAEB0C77BCF5D79CB74E5D11465EF6B3E7665B0CBBF8F437BE39A9DBB0200103FB9C21EFF327378CB60E4D5D76C5FF9C2E73F7ACD0B9FF302D315008098C915F678EFB92BC7BB75EE0A0040CCE40A7B9CCFCCE17C7E530080632457D8E362317E896FBAFE6EEEE9C7A1B7E13775EE0A0040B4E40A7BFC4E8A902B75DBCFBD9083FB769B7D5F6473AF020080FDE40A7B5CA7E5B7DB745D3677734F3F0EBA0D3D16AAECE72AFFF01F0A008083922BEC91566DF81E7F9D56732FE4B05645FDED36BBCD4EFCD70400385E72853D9AAE9F2E0ED6F5C3EC3390C36D7FADF2F06B164DF7F1BF140000872457D8EF6A5D7EBBCD16F9C94E1EF27A9C20FD58E6C3DC2B0100E0397285FDA6F33A42B154ED387C987D12F2B9DB7E18A66B82259BF373000088935CE1593759359E89BECCBBFEA4261021572E932294D8EFA4987B2D0000BC44AEF0AC6118A62B1AFF5CE5D3458D679F8AFCFBB6DFFC52DF6ED38B45D6F6A77FA5660080A326577849DBF5BF5663B1842FF7EBE33F6EAAA8BBCD3160E3BD56A69B6002001033B9C22B8661B84ECB502CD38161ABA23EBAB359DA6E08CB9EAE03F66D332C32570100380A728537299B2EB4CAB7DB6C3AFF7EBAA6D6763FDAEDD3353BB71E00E088C815DE21ABDBDBAC9AAEA9F5BF8747FCFBDF17D94D5A8EE7DF0C2775CD00008093275700008048C915000020527205000088945C01000022255700008048C915000020527285E8144531DCB9E23000007285F8AC9375EFAEF30000C8152294A669D77573AF020080F9C915A21372A56DDBB9570100C0FCE40AD1C9F3BC699AB9570100C0FCE40AD109B952D7F5DCAB0000607E7285E894655955D5DCAB0000607E72858F5BAD56CFED3CF7E2175EB0556E7CC2FA0000387272858F7B39571EF5C9DB73A5AEEBA2283E77A900001C23B9C247AC76DC3D3F5DD97DC153CF7DB85C0100602257F8B8E7A62BAFCE585ED6B66D96659FBB5400008E915CE1E3762364778AF2E8057B472B2F748B5C0100602257F8B8B71C0CF6DCCE0BFABE5FAFD79FB95000008E935CE1231E4D489E3BD55EAE0000F02FE40A1FF76A8D3C3A5AEC8D07833DFD1C0000CE935CE1E39E9E61FFDCB161EF9AAEBCFD6500009C36B9C2C7ED3DD5FEEE337225499261183E77B500001C1DB9C247BC70EECADE03BDDE7B30D87ABDEEFBFE102B0700E088C81562946559DBB673AF02008099C9156224570000B8932BC429CFF3A669E65E05000033932BC4A8288ABAAEE75E05000033932BC4A82CCBAAAAE65E05000033932BC4A8DC987B150000CC4CAE109764953CBADE719AA6732F0A008079C815E29265D96AF95FABE41B732F0A008079C815E2D275DDEE80254B5DD11800E07CC915A2B35EAFB7A395B03FF7720000988D5C213A4DDD6C73C5E58C0100CE995C214649922C97CBF57A3DDC0D73AF050080D9C815625496E56AB52A8A62EE8500003027B942A442AE0C83D10A00C059932B000040A4E40A00001029B9020000444AAE10A9BEEF86BEEBFB36ECCCBD160000E6215788D1D0B759FA2B5BFF9CB67DD73AED1E00E00CC915A2D36F5A255D5F64EB1FE9FAC766FBB36B9BA11FEFC2A25B0000CE875C212EFDFD5C656C95A6598747D8C9D2F0188BA5EF7BF78D0400381F728588ECCE559A7A3D0C753F54A1581E662C3FDAB60EC5326CCCBD5800000E4EAE108BBFE62A9B5619866ADA6E672CE9FAE7B658E65E2F000007275788C2DEB9CA30349B5C3163010038537285F9ED9BABD4779B56B97B28163316008033245798D9DEB9CA43A5FC552C662C0000E746AE30A747D7017B18A4348FA62B662C0000E749AE309BBFE62A4D1252A4EFAB872CF9EBD1FFB73FBEC68C0500E04CC815E6B13B57A9EB64E89F6D95C78FFEBE58CC5800004E9E5C6106BB7395D02A7D5F767D19B679F63B3C5316D75393EC3EAAF226BCBEC87EF77D31BD3EBCD18C0500E0B4C915BEDADF739555DF955D57F45D115264BC7B7D783E1D8B655329E5F4A8CAEBE9F9B02DF2CBF1F5FDF8AEA64ECC5800004E985CE14BEDCE55AAB1558AB6CBBB87B9CAF4FC54326571D56D9A24A4CBEEF3613FBC782A9CF0DE103C662C0000A74AAEF07576E72A55B5EC42A88C8F226CB77395DD6D2896DDB9CAEE76F3AE62FA84502C662C00002749AEF045FE9AAB54CBB6CDDB366BBBB01D93A328AE76E7272FEF878C19DFBE79EFF439E103CD5800004E8F5CE12B0C7FCD551663A88C8FB134BAA95BDA4DB1EC9BB13CDADEB7CA7FEF1D779A36ABABE5A319CB9D5A01003872728583EBFB6E67AEB2689BB469D2A93136DBFFF68BFCCFAB73958777FDBDDD7C66553E9EB128160080A3265738B86108B9F2736C95F2BF56699B4D694CDDB2B32DF267672CE35C65F3AEA7DBF1BD0FC5B2099B9F4D53C57C12CB6AB57AFB3FAD363EFC394F7700008E855CE1E03667ADFC4C37A7AC349BA8D89DABB43B7392F0084DF2DCB92B45FE67EF4CE67E7F532CD5E690B0F0B39ABAEABA2EDA62D92D874715B15B174F4365F59ABD9FB3F7070100C44FAE707043BF99AE8C1392F1462BDB32E9FE3E77656A9597CF5D298AABDD776DDF3B7DE6D82AD32BD73FEBBA9C72259EE3C1DE1218CFFDD3EE6B5EFE118F3EE74EAE0000C74CAEF015FAAEDD9E55128AE5A14FC66B826DAFF1F5C25CE5AF194B71B5BD9ED8C37BC74F9BE62A53AB5455D1344DDBB62157F23CCFB22C4DD3A228CA8DBAA9DB8D19072F8F42E2E93FDD3DA997173EE7E57F7AB4235A0080232257F80A210CBAB649D7FFCD581EEEB8727FFB94E7EEAFF2DCFD5876DF7B7FEB95F4AF5609A6E94A10CAA46BBBBAAEABAA0AB952E445B69124C95402593A3D91857F9D5E135E3FBEABEB3EEB2FF0C683B81EEDEFBEFD2D1FF5E8273EFACC17B20700204E72852F32F443DBD63B339664A758CA67AE03765D3E733F96F15DE33DEFC74F081FB59DAB946548977A6C95B135BA37DE7D65D326A3A955AAB24AD3749AC94C5FF143D84CCF4C49338E68EAFB11CD78BCD9FBBD302D797A10D707F6EFFEAE94977F280040B4E40A5F65B8DB0C3AEAED8CA56942B1147D5F8647915F3E9AA254E5F5F44F215A1E9FC192FDEEC75619DFDB8456D9CE55CAE2AF56E93FED4E919BE9D0A6699A769AC014C5FD8866BD5E4F611076A667A6A3CEC26BA603D282479FB6779672F7E460ADE732E38D239A573F0700207E72852F320D3A1E8AE57EC6D234EB6ED3247D1FBEFEFFDECE4FAAF2A6EFABA1AFFACD632C9687B94A3EB5CAE65D7BE72AD3415C5F7F4DB0E9A8B37144535755394E69F23C9F6632DB7ED8DD0FC2ABA6B74C479D3DCD95A76396BBF74C579EDB010038167285AFB567C6B27E2893FB194B689561A81F3DA6194B489AA961C2B6A9D75F3057F95C2118429C84ED74D4593005CCF6A8B375B2DE56CDF49AE92DE1F7EA877EFB212F4F57B62FDBDD792E7E0000622657F852CFCD58C60219AAA795F2F431BD32BC259EB9CA5BEC3D3AEBE97F8626995E197E9DA955F23C9F7A667B6180E9A8B3F0CCF482B06DDA3D479D3D37A5912B00C011912BCCE1C98CA56DD29D5C69C2F6EEC976F3FCF89AB1558E6DAEB2EB2D539147CFEFFE67F835A7794B555553AEE4593E9D36F3E863C3F353D2845786D7EFFD71000031932BCCE099194BDA3F14CB4E9FFCB7DF6F5BE5A8E62AB398862D4DDB940FA6B368B6170608FF39F71A01005E275798CF8B3396939CABC4C38C0500380A7285D9BC3A63D94E57CC553E9D5C01008E825C616EAF9FC762AEF2F9E40A007014E40A337B79C662AE7220720500380A7285383C3F6331573904B902001C05B942149E9BB198AB1C885C01008E825C21264F662CFFCD552A7395CF24570080A3205788C89319CBCF691B5AA51953C55CE5D3C81500E028C815E2F33063699AAAA9ABBA2EC7FB1D9AAB7C2AB902001C05B94274B63396BEEBC74069BB69A862AEF289E40A007014E40AB11A36DDD28FDD72BF1DCC553E8D5C01008E825C216AC3DFE65ECEE9902B00C051902B708EE40A007014E40A51CBF37CEE259C26B902001C05B942D47CAB3E107F5800E028C815A2E65BF581F8C302004741AE1035DFAA0FC41F1600380A7285A8F9567D20FEB000C051902B44CDB7EA03F18705008E825C215E7DDFAF93F5DCAB384D720500380A7285788DB9B2962B0721570080A320578857C8952449E65EC569922B00C051902BC4CB74E570E40A007014E40AF172EECAE1C81500E028C815E2D5755D9AA673AFE2A42449B2FA9BBF30001033B942BCDAB6F565FA73A559BADB2A7991675936F7A200009E25578857C8155FA63F57DFF7DB56495649A8C1AEEDE65E1400C0B3E40AF1325D3984749D2E97CB902B2105FD790180C8C915E265BA7208755D27ABF10C96222FC2FEDCCB010078895C215EA62B07727F30987BDA0000D1932BC4ABAEEBA228E65EC509AACA2AE44A5996732F0400E015728578855CC9F37CEE559CA0E16E08B9D20FFDDC0B010078855C215EA62B0000674EAE102FD31500803327578897E90A00C099932BC4ABAA2AB9020070CEE40AF12ACB3214CBDCAB000060367285785565E562BB0000E74CAE102FD395A26E57457D99149749F9BFDBF4DB6D16F3F6F7669D8BBCCAEB7698FB4F07009C06B942BCCA8DB9573183AE1F9679FD7D917DBB4DFFF7F038BAFDEBB46C3BD90200FC13B942BCCE73BA9255ED8F653ECD2B7EADF25551974D5735DD10FD37FF699D49D96C6741215DC2FAE75E170070C4E40AF12A8AA2AECFEBCBEE6D564DA3893FEBB26EC7BBCE4F957274DBB61BAED272FA5DAED665D7471F5B004094E40AF12AF2A2699AB957F1751679354D24D2B29D7B2D9FA36CBA8BC57866CB6552CEBD1600E028C915E27556D395B46AA6133FCA87E3BE4E635BB7FD542CCBFC5CFE4F09007C22B942BCF23C3F93E94AD70FD3F92A59D5CEBD96CF57B5DDF7CDD5C39AAE9F7B2D00C091912BC4EB7CA62B8BBC9ACEF188611E7288ED32AFC32FF83B293EFE370200CE925C215E799EB74D3BF72A0E2E7C9FFFB6B98ED6090F1F42B45C8CD765CEA6EB070000BC915CE11D56ABD50BFFF9F28B3F20CBB2B66DFFF143E217BEC27F7B983CC4300939D076BAE899EB1A0300EF22577887977365F59AF7FEB8902B5DDBFDEBA2A3377D8F4F8A133F4BA718AB6CBC93CCDC0B01008E895CE1ADB6BDF1C614315D79A3DF491172A568C6309B7D0672B86D3F0CE1D7BC58C81500E01DE40A6FB2DB2A4F9FDC7DE6B3462B7767932B3F37D7046BCFE0468AD3F5C1E65E0500704CE40A6FB2B73AF6E6CAABFB6F7726B932DD6EA5DFE4CAEC3390836EBF6D6E72FFB1BF1200709EE40AEF3055C70BC393CFCD95F57ADDF7A77F21A96FFF3673B8BCBC7CFB3F5D6E7CF8739EEEBCCB3FFEA600C019922BBCD5B6555E7ECD271E0C7626B9F2BFCDCCE1C3538B500E7BF7EF1EA2627A7EF2E85F5FB6F7731E3DF3AEED3447FAD43F1E0070E2E40A6FF2748AF2EA79F61FAE94AD33C9950FCC1C5E088CE75EB0F7435EFE118F3EE7CE740500F87272858F78F584FBBBB74D635E7626B932CD1CFE71BAF26872F2DC74E5E98CE5B9C9CC739FB3FBCC7B672CFF73EE0A00F04E728577D80E4C5EC895A7E7B17CB858CE2457DE3B7378CB415C777F9FA6F268F0F2968F7AF4131F7DE673139BCFFD4D0100E40A6FF2E8C8AEE7CEB37FE154FB0F444B9224C370FA97F7FDC473571E3DBF9DA55C3E737ECB5BF6EF1EE2C4B92B00C0D7932BC4EB1F4F7D3916FF3273D83B4BB9FBFB60ADBD3BBBEF7A7544F3EAE7BC91E90A00F05E7285789D49AE7CF8DC954775F1F46C93CBBFCF5DB97B321579FB74E5D1F31F9EAEC81500E05DE40AF13A935CF9D8CCE1D1FC64F7C9E75EF37424F2817357EEEE1EC7CFDB99AE0000EF255788D799E4CA7BCF5DD99E4972F7E2B464EF2B5F988A5CBEEDCA60BB9FF3DE198B73570080F7922BC4EB4C72E51FCF5D79752AF2E8F9A72FDB7DF1739FFFE8357B7FDCAB4C570080F7922B44AAEFFBF57A3DF72ABEC23FDE77E588B6CE5D0100DE4BAE10A9F3C995F399399CCF6F0A007C16B942A4CE27572E16E397F8A61B6F8819C30CE470DBF09B3A7705007817B942A4CE27577E2745C895BAEDE75EC8C17DBBCDBE2FB2B95701001C13B942A4CE2757AED3F2DB6DBA2E9BBBB9A71F07DD861E0B55F673957FF80F05009C21B942A4BAAE4BD374EE557C85B46AC3F7F8EBB49A7B2187B52AEA6FB7D96D76E2BF2600F0B9E40A916ADB36CBCEE2C0A1A6EBA78B8375FD30FB0CE470DB5FAB3CFC9A45D37DFC2F05009C1FB942A4BAB63B935C09AED6E5B7DB6C919FECE421AFC709D28F653ECCBD1200E0B8C81522753ED395603AAF23144BD58EC387D927219FBBED8761BA2658B2393F0700E0EDE40A913AAB5C096EB26A3C137D9977FD494D2042AE5C264528B1DF4931F75A0080E3235788D4B9E5CA300CD3158D7FAEF2E9A2C6B34F45FE7DDB6F7EA96FB7E9C5226BFBD3BF523300F0E9E40A916A9AA6C8CFEBFF1FDF76FDAFD5582CE1CBFDFAF88F9B2AEA6E730CD878AF95E926980000EF255788545DD745715EB972B799B15CA7652896E9C0B055511FDDD92C6D3784654FD701FBB6191699AB00001F26578854D334797EA6B7142C9B2EB4CAB7DB6C3AFF7EBAA6D6763FDAEDD3353BB71E00F8477285489DE774655756B7B759355D53EB7F0F8FF8F7BF2FB29BB41CCFBF194EEA9A0100C02CE40A913AC3735700007844AE10A9AAAACAB29C7B150000CC49AE1029B90200805C2152A155AAB29A7B150000CC49AE1029D3150000E40A912A37E65E05000073922B44CA74E5A0CEF69E3600C071912B442A7C9FAEEB7AEE559CACD56A35F71200005E27578854511472E570E40A007014E40A91325D3928B902001C05B942A44C570E4AAE00004741AE1029D39583922B00C051902B442AE44AD33473AFE264C91500E028C8152295A669DBB673AFE264C91500E028C815229565995C391CB902001C05B942A44C570E4AAE00004741AE10976495ACFE16BA65EE459D20B902001C05B9425CB22C5B2DFF6B957C63EE459D20B902001C05B9425CBAAEDB1DB064A933580E42AE00004741AE109DF57A7DDF2A5916F6E75ECE69922B00C051902B44A7A99B6DAEB853E481C81500E028C815629424C972B95C27EBE16E987B2DA749AE00004741AE10A3B22C935592174EB23F14B902001C05B942A4C2F7E9BEEFE75EC5C9922B00C051902B708EE40A007014E40A9C23B902001C05B902E748AE00004741AEC039922B00C051902B708EE40A007014E40A9C23B902001C05B9424C86BBB6AEDBB2AAD26CFB68CAAAABEBC1458D3F955C01008E825C2102C3506559767DBBB8F8B9F8FE63EF6379F133BDBA0EF5D2775DA89A6170B7FB7F22570080A3205798592890D5CFDF8BEF53A8FC0CC5925CFE59FFB9CA6F16D9CDEDFACF75F2FBCFF2E2D7B65BC28BCB753AF48362F917720500380A7285D9744D1B52E4BE432E7E863869B2ECAE6DEFBAEED16368DB26CBC30B960FE397D5AFCBB6AAFB7EAC963BD9F27E720500380A7285793445B9FCF16B0A95FC763134CDA64CFA97B743DDE4378BED1CA6CAF2502C63AE289677922B00C051902BCC20B4CA749A4AF2FB4F57564FC7292F3FFAAA5AFDBA9CC62CA158BAAE1B06C786BD8F5C01008E825CE1AB3565351DD3955EDD6C0EFD7A65A2B27FDB76EBABEBE98C9769C6E2A8B0BDC29FA5DDA8EBBA2CCBAA1A2F6A10244932F7D200005E2757F8525DD34EC780ADFF5CED3D4DE55D8FE4CFD57438595355673B6309A93605C9582365551445A891344D4390AC56ABB00DFBE199F07CB931BDB877616800E018C815BED4746EFDEAD7E5E664953D9393BEAEAB649D5EDDA47FAE43D2846D76735BAFD3FD3396A69DAE2A369E793F7D053FC55A69BBF17F4D13A2AC0ABD91E7F9381F49B3D5C67ABD9E0626D3BFD6751DFE14E1F567586E00C0E9912B7C9D3249A761C8FEF3559A3694C9B3F75DF9F1AB5C257BCF63595C8C2FC896AB2EFCE77454D8517974BC5630CD43A6F148906E844A99E627A15BDA4D91CCBD70008083932B7C95E16E3A0CAC582C9FCE49FAB2DAFCEBEE6D22F7EC8FA7BB34EDA3F7860F9C7AA6A99B7E0C96E80E73FAEB78ADEAFE78AD6D9084EDF49FE1F96942324E531CAF05002057F832559A4DA395F130B0B6BD6BBBEDB62B1F2E6AFC8647F2FB72F7BD611B3E703A773F4F92E95BFE0B0396F04F210CF23CFFDCDF6ED3176DD334D378247CFE341299C623539084FFACCAFF8ED70A8E6E100400F0C5E40A5F64FDE77A2C8A9BC5D084C668A76899F64381BC3A57D9DD1FE7330FEF1D3FE7E128B2D5EF3F6DD3BE70CE7DA885D583772DFEB9EB6BADD7EBE9D3B2F1E8ADECFE78ADCAF15A00009F43AEF02586612A8D26CB86BA19EA3A6CFB715B97CBD51BE72ABB8FB628361F72FF394D964F3D535775D7764FCFB9AF9B7A7B2AC8DE5C717D2D008008C915BE425BD5D37DE887AAEAAB6AA8EACD76DCDF5CDAEBAD7395ED7E7EB378F439D3F16065963F3A1E2CEC6F6720BB5C5F0B00207E7285AF50E7C5C33DECCBBE2CBBE27E5BAFD30F8C56C613EB7FFEEA8B87CFD97CE66A3CA2EC479EACEF8F07EBEF8F07BBAF93E5E35C71BC160040FCE40A5F613ACF3EBDBAEE8AA2CB8BED76BAA8D7BBE62ADBFDDDCF09DBFB73639649E890E98AC6D38FEEC75BB9D4799E4F57045EAFD7C92A79EFB92B0000CC42AEF015A65CC9AE6FDB2C6BF37CBBCDAF6F3E365D098F3A59EF7E5A68A1C5E6EE2BD3D864EFF5C19A76BC72D7582C4932CBDF01008077912B7C85324D17DF7FA6D737635A8C8F7CDAC9C65C79F75C65DAA99264FB39E3475DDDDC4F57EA66EFD9F600001C1DB9C257D81E0CF668BAB27330D8FB2F0E96E5BB9FB6FE73F5EA74050080E32257F80A9B53ED7F8EA7DAFF7DEECACEA9F6EF9BB1AC7EFE7E74EECAE6E62D3F8A646DBA02007032E40A5F617321E31FCB8B9F212DB6D7F2EACA717FF9D7858CDFFAC8AE6F76AF30161E8B8BF1F922CB4C5700004E865CE12B0C7D3FDD17A55EA78FEE9752AD920F9CBB3266CFCEE76CA634E3F35559FD375D0100E0C8C915BEC470974CE796DCDC3EDCCFFEBF7BDB4FC771BDFD512C96DBF74EF7B6CFAE6F179BFBBA84FC99A62BDBFBAE000070BCE40A5F62B82B37A7A92C7FFCEAABFA2EE444D36CB66DD8B645119E7FE35C657D79B5FBDEB01F7265B119DDA48B655DD72157FA71B862BA020070F4E40A5FA4EFBAA949F2DB45C88CBBB6DBDD866259FD7AFD24966938F3E8BDE1C9F15F2F7E5665197265BC557DD719AD00009C00B9C25719EEF2E934958B1F7D59DD75DD5DD7EF6E87A6F9FBBAC67FCD55563F7FD7EBF4E9BBBAB29ACE8A496F9775553B120C00E094C815BE48E887BEEF57BFC6D35456BF7EDF35EDA6371E3F86A6AD56497EB3585F5EADFF5C856D68983ACB9E797133CD6442CC949BD14AC895AE7315630080132157F83AA158DABA5EFE188721C99FAB87EAE89FD9BEFCAFE3763A7D7FF9E3579165F7ADB2B92698D10A00C069902B7CA1E12EB4C4E69691E3215EEB502CCFCC585E7D0C4D33DDC67EF1FD679EACEBAAFEEFAC15478201009C0AB9C2D7DA144B95E5DB9BD38F170A7B6D8AF268DB57D56A7373C9E5C54EAB345A0500E0D4C815BED6707F12CB582C9B53E417179BEB7D35CDDB862A6D7A7333BD71F9E3576895AAAAA65671277B0080D32357F8720FC5D254F574E6FD664EF22BBDBE69B27CBC36F1BEF358C23F8DF782BCB8BF5C5878E378BECAC35C45AB00009C24B9C20C868DAEEB4266E4AB64F71E91CB8B9F2145D67FAEB29BDBF048FE5CAD7E5F6E2B65BABF4AB65C8DD7017BD42AFDE06A6000002746AE309387194B8896A66EF2641DCA6479F1FCFDEC2F7E2697572154AA4DA834E365C09AE9DC7A7315008053255798CD3463998A651C91346D5D555596E7EB3464C9F651ACD322CBAA32FC5BD58C03954DA96CAE59FC5FABA815008053245798DBE65A61433F1E1B160A64EA962948A611CAFDB669A6E7DB8D7EEC947E0A9EB97F0100000E45AE1081CD8161A158C604E9C661CB942E53BDDC6F77F4BD560100380B7285584CC7746D8F10BBAF97A94C36FB53D24CAF997BB100007C05B9427476BB65BBBFDD0200703EE40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B902000044EAFFC793AAD70BE9D81C0000000049454E44AE426082, '21', 'leave2.png');
+INSERT INTO `jbpm4_lob` VALUES ('29', '0', 0x3C3F786D6C2076657273696F6E3D22312E302220656E636F64696E673D225554462D38223F3E0D0A0D0A3C70726F63657373206E616D653D226C656176652220786D6C6E733D22687474703A2F2F6A62706D2E6F72672F342E342F6A70646C223E0D0A2020203C737461727420673D223139362C32352C34382C343822206E616D653D22737461727431223E0D0A2020202020203C7472616E736974696F6E20746F3D22E794B3E8AFB7222F3E0D0A2020203C2F73746172743E0D0A2020203C7461736B2061737369676E65653D22237B6F776E65727D2220666F726D3D22726571756573742E6A73702220673D223137322C3131382C39322C353222206E616D653D22E794B3E8AFB7223E0D0A2020202020203C7472616E736974696F6E20746F3D22E7BB8FE79086E5AEA1E689B9222F3E0D0A2020203C2F7461736B3E0D0A2020203C7461736B2061737369676E65653D226D616E616765722220666F726D3D226D616E616765722E68746D6C2220673D223137322C3232352C39322C353222206E616D653D22E7BB8FE79086E5AEA1E689B9223E0D0A2020202020203C7472616E736974696F6E20673D222D33322C2D3822206E616D653D22E689B9E587862220746F3D226578636C757369766531222F3E0D0A2020202020203C7472616E736974696F6E20673D223132382C3232313B3132342C3136353A2D34322C2D313822206E616D653D22E9A9B3E59B9E2220746F3D22E794B3E8AFB7222F3E0D0A2020203C2F7461736B3E0D0A2020203C6465636973696F6E20657870723D22237B646179203E2033203F2027E88081E69DBFE5AEA1E689B927203A2027E7BB93E69D9F277D2220673D223230302C3330382C34382C343822206E616D653D226578636C757369766531223E0D0A2020202020203C7472616E736974696F6E20673D222D33392C2D313022206E616D653D22E7BB93E69D9F2220746F3D22656E6431222F3E0D0A2020202020203C7472616E736974696F6E20673D223333392C3334323A2D34382C2D313122206E616D653D22E88081E69DBFE5AEA1E689B92220746F3D22E88081E69DBFE5AEA1E689B9222F3E0D0A2020203C2F6465636973696F6E3E0D0A2020203C7461736B2061737369676E65653D22626F73732220666F726D3D22626F73732E68746D6C2220673D223239342C3337352C39322C353222206E616D653D22E88081E69DBFE5AEA1E689B9223E0D0A2020202020203C7472616E736974696F6E20673D223333392C3435373A2220746F3D22656E6431222F3E0D0A2020203C2F7461736B3E0D0A2020203C656E6420673D223139392C3434352C34382C343822206E616D653D22656E6431222F3E0D0A3C2F70726F636573733E, '28', 'leave2.jpdl.xml');
+INSERT INTO `jbpm4_lob` VALUES ('30', '0', 0x89504E470D0A1A0A0000000D494844520000043A000002490802000000C429C0BB0000342A49444154789CEDDD2D78A3DCDA80D123478EAC1C3972E4C8CA9195959595919191C84824128944229148241289AC3C9BD0E6CDB4E9EF34652759EBE4E2E2CD24E96E3F93FB7BF8F9DF1D00004094FE37F702000000F6932B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40AB11886E16ED8B31D1F00009C25B9C2AC86BBA25A27D9F5EDEAD7F5F2C7D5E2FBD5E262DA5E2F2F6E93DFABF4BAA8D3BEEF878DB9970B00C097922BCC23B4479A2F6E369512B2649DDDE455D274653FB4E11176361973B3487E5F2F2E42CCACF3DB295A0C5B0000CE875C610659B90A0572B3FC1922A4EDABE1AE9B1EFDC3CEEE7EDBD7EBFCE666F533B44D5EAE4C5A0000CE875CE1ABADD2EB9BE58F102AC35DBF0992B76EC35BAE973F92ECBAEB3A63160080732057F83A7DDF2DD6978BE477D5E4CFCD525EDEAFDAFC36F9BD5CFF69DB66E8CD5800004E9C5CE1AB0C772133C2A3BF6BDF3B57F97BDB4D9F33CE58140B00C049932B7C89E16E955E2D92DFFDD07E6CAEB2BB1F82E736F99DA4D78A0500E0B4C915BE42562E6F963F36C780FDCB5CE5BF6DDD16D7CB1F59B9721E0B00C009932B1C5C3FF49B2B11DFFCFB5C65777F9DDFDEAC7EB56D7B5F2C00009C1CB9C2618590D874C5CF6D6F6CCE5DD9BBDFBDF7F9E97E2C5DDBF57D6FC00200707AE40A87157225B4CA1815431362A31BDACD76DCEFFF793FC96E42B1344DD38FC1D2CFFDBB0200F0C9E40A8734DCE55572BDFC517765C88C171EFD1B9E7FBADF74E5D5E222FC88B66D9D730F00707AE40A0714FA61955E8D6798F4F5C3A37AB27DCBF3CFED57B7AB5FCBF4AA0DE5E20C16008093235738A0D00F212742B134635D54FBB6E53B9F7FBC0D1F1E7E445DD7D3458DE7FE8D0100F84C72858319EEFABEBF5EFE488B45D39575571C621B3EFC7A711172A56DDBF0E30C5800004E895CE1504239847EB85A5C14F5BA6E8B9016F7DBF73E5E7C57F8F03157AA6ACA15D707030038257285431973A51B73A56CB2AACDC3A3DE6C9F3EFEE9F926BB5A7CAF42AE34A62B0000A746AE70280FD395EFD543AEBCEBF15CAB3C7A4D39E6CA4565BA0200708AE40A0733DC755D375D68785317BBD1F2F6FDE7B6F7AF091F3E4D57C6BBAF98AE00009C16B9C2A14CD395EBC5455A2C369390E20DDBFC99FD675FB32E6EAF973F4C5700004E925CE150A6735736F745F9B33D637E6C8C4FDDDFDCD7E5A7735700004E925CE150A6E9CAFD7D51EEAF3B5C6EB7CD27ED4FF775315D01003849728583D9DC77252B57E3A9F06DDEF465F3DFFD1F9FEEEFDE1D72B3ED765EF374BF1BF7AB26BB5E5C64C5B2AEDC770500E004C9150E66B81BFA2154C4EDEA57925D777DDDF675376CB6FDCE7678B27DEEF927DB24BBB959FD2CCB72BCAB7DDB8DD31500004E885CE180423F745D37454537349FFA08C5D2DC2C7FAEF39B902B4DDD845C19C6E18AE90A00C0E9902B1CD2E65AC66DD3DCAC7EADF3DB7E68FBBBF6B3B6A1826E57BF8AA2A8AB7ABC8A71E74830008053235738A0E96CFBB66DB362395E6EB8C94366848479B4ED9F3CF3F2F3613B9EB5B2FC91168BBF8E04532B0000A745AE7058D3E58C9BA659A5D7B7C9EF501A9B47FF2FDB502C8BE472955E9545395DC2B8EB3AA3150080D3235738B0CDF5C1BAB6ABEB7AB9FEB35C5F4EE391CD9CA47BA89777ECF7431B3E67B1BE2C8A623A6BC535C100004E955CE1E042488C67B0B46D5597A1346E93DF755B7C6CAE5235F922F91D9AA728F3E93030AD020070C2E40A07376C6CCEB96FABAA5AA5D7D7CB1FEBFCF6BD7395757E13DEB84AAFA6B94A6895A669C2C7BA7E3100C0A9922B7C89CD3D58A662A9AB3A2B9637AB5FB79BCB85B57DFDF24425BC20BCEC66F533BC3E2D965A0500E07CC815BEC83861D9164B5D5755B5CEC72B115F2D2E6E93DF49765D54EBBA2DFBA1ED861022655E25D3A58AAF1717A15542B1E479BEA7551C05060070BAE40A5FE7BF6269C762A9AB3AB4475E26D345C3AE973F42995C2DBE5F6DB637CB1FA15542C68417141BE1C52172EECFAD1F5345AB00009C38B9C297DA9EC7D2B55DD334D398A52AAB32C4485116FB941BE155E389F563AA68150080732157F872C3FDED2343758CF1B13936AC09FFABC679CB9825BBDB8D66A31B6FAFD20DE365C0940A00C059902BCC64733F96B15936DAC9667812CA64BB1F8C95D276D344651ACECCBD740000BE885C614E637B6C2E1A161EFDF3EE2B45A700009C19B94214EEBBE5C1D3FDB9170800C00CE40A00001029B9425C8AA2987B090000C442AE1097D56A35F712000088855C212E720500802DB9425CE40A00005B7285B8C8150000B6E40A71912B00006CC91522D20F7D922473AF02008058C81522D2F7FD7ABD9E7B150000C442AE1011B90200C02EB94244E40A0000BBE40A11912B0000EC922B4444AE0000B04BAE1091B66DB32C9B7B150000C442AE1091AEEDE40A00005B72858898AE0000B04BAE1011B90200C02EB94244E40A0000BBE40A11699B36CFF3B9570100402CE40A11A9EBBA288AB9570100402CE40A11699AC6740500802DB942444C570000D825578848D334452E570000B827578888E90A0000BBE40A11A9AAAA2CCBB9570100402CE40A1109AD5295D5DCAB0000201672858898AE0000B04BAE10917263EE550000100BB942444C570000D8255788C878EE4AE5DC150000EEC915225214455DD773AF02008058C8152292E7B95C0100604BAE1011D315000076C9152262BA0200C02EB942444C570000D82557884896656DDBCEBD0A000062215788885C010060975C2122699ACA150000B6E40A11315D010060975C617EC92A59FD2D4DD3B9170500C0FCE40AF3CBB26CB755CAA2CCF37CEE450100303FB9C2FCFAAEDFB64AB24A9CC10200C044AE1085749D4EB992659923C1000098C815A250D7F5942B7996577535F772000088825C2116C92A191F4932F742000088855C21166559AE56ABA228E65E080000B1902BC462B81B9255D2F7FDDC0B010020167205000088945C01000022255700008048C915000020527205000088945C010000222557789FA2E996797D9914BF93E2DB6DFABF87479CFB619161A98BBC4EAB6698FB4F0700C07BC915DEA41FEE42A55C2CB24D091CEBF626ABDACE7D5D00008E865CE17559DD865099E615BF5679E896B2E98AA61B86BB6133B388763BAD735D36DB5950E896B0FECFFDFB000070207285572CF27AFA96FF277CEB3FE6D144DBF5D76935FD2E57EBB27770180040F4E40A2F59E4F7DFEF93B2B98B605AF2EFDB905CDF17F7A7B5FCF39F070080C3922B3C2BAFDBF0B5FEFB6D16BEE2CFBD96CFD474FDE6D83647850100C44EAEB05FD70FD3F92AEB5399ABEC6EABB69F4E65A9DB932A310080132357D86F9157D3391E732FE45056C5784ECE6552CEBD1000009E2557D8631886E9CABF4DD7CF3E0939D0B61FC747F966C072C4D70F0000386D72853D8AA63B87C9C36D364E90968533580000222557D8E3261B2F08B6DA7C8F8F611272A0ED5465BF562E1106001029B9C21E974919BEC757A77541B0A7FACD316F178B6CEE850000B09F5C618F1FCBF19A60D34D21679F811C743B5D1FEC637F2500000E4DAEB0C7749EFDF485FEB47DDFFCA673AF020080FDE40A7BFC6F337338E864E3F2F2F28DCF3FF7CA4FD9865FF39B5C010088955C618F6F879F39840879F99F2EF7F9F4657CC16F0A00C087C915F698660E8798A83CE70373984FD9FECFB92B000011932BEC71A099C3EE78E4B9FDDD274D570000CE9C5C618F039DBBF2EA7465EFA4C5B92B0000674BAEB0C78CD395EDBEE90A000072853D0E77EECAA7EC7FE2D6B92B000031932BEC71B8E9CA73765FF3DCEB3F7D3D77A62B000071932BEC31FB7D5776B72FBFFE1FB7CE5D010088995C618F19EFBBB23B48315D0100387372853D0E74EECADD9BA72B2FEF7FE2D6B92B000031932BEC713E3387F3F94D01008E915C618F2F38772592AD73570000622657D8E3C7320FDFE3DB7E987B210737FDA673AF020080FDE40A7BFC5AE5DF6ED3B2E9EEE69E7E7CC174E5FB22FBE09F09008003932B6764BD5E274992A559505555DBB6CFBDF23AADC2F7F8AC7AF605A7A16EFB6FB7D9CF653EF7420000D84FAE9C91D5C672B95CED5827EBA7AF4CCA26E4CA555ADECD3DFD38E87655D4E1D7BCCDAAB7FE050100F85A72E58CACD7EBBF4265A3699BA7AF6CFB613C4AEA36EB4EFAF495CD316F5951B7732F040080FDE4CA291B8621D4485996699AEE864A9224D393FDD03FF7DEAB75198A659157B3CF400EB44DABF6DB6D7AB1C84E39C800008E9C5C39357DDF374D531445A891902579968732E9DAF1A4F9AAAA42ABA4EB34FC6B9EE7C3DD4B5FD4A7F33AC217FAA67B36698E573F0CD335C1D26ACF7009008048C89553D0755D5557A140429FACD7EBB053D77578F2D1CBDAAE4D564996672160DEF2B1D7691972E5C7723C242C8679C8676DFB7EB84C8AD02ABF93E22D7F070000E622578E55DBB6555565591612254DD3B2289BA6E9FB572621E1C5E1656FFC11E1BB7DF8423F5D3BABED4EE498A9505E97C9789CDB8FF1973AC1C11100C029912B47633C11A5F9EF4494102A613F44CBFDE0E330C217FAE91E2CDF17E9BA6C62988DFCCB36ABDB8B453EDD6BA56A1F4F9F0000888D5C895ADFF7755D174531DD3225CFF3F17E295DFB956B18EE8F0ACBC2B7FC902EABA23EBAB359427485D69AAE03B6F92D0A73150080A32057A2136A643ACA6B9D8C89125AA5AAAB578FF23AB4BC6E7FAEC6B9C4F498AEA9B5DDDF7D3EAAFDA76B0EDD32EF5F120080B7932BF31BEE86B66DCBB20C89321EE595662151DAA67DE12AC373299AEE36ABA66B6A4D938AA3D87E5F6437599555ED899C7F03007036E4CA3C1E9D8812B655598568997B5D00001011B932832CCDB627A23CBDDC30000030912B335827EBD9CF45010080F8C99519A4696AA8020000AF922B3308B9E23415000078955C99419EE76FBFB53C00009C2DB93283902B755DCFBD8A1885BFCCDC4B000020227265065555956539F72A62B45AADE65E02000011912B3328C75A29E75E458CE40A0000BBE4CA0C9AA671D4D35E720500805D72650672E539720500805D679D2BAB1D777F7F577EB4FF820FFCDCAEEDB22CFBF7F59F1EB90200C0AEB3CE95ADEDB7E4A7DDF2F43FDFF84F2FE8FA6EBD5E7FE08D274FAE0000B0EBDC7365EF5CE5D0B9D2F7BD5CD94BAE0000B04BAEFC952B4F77765FF3F418B00F7FBDF6BD7C2F7F16000076C995D5DD6BC780BD70668B5CF95CFE2C0000EC922BFB4F9ADF3B5D79FAAF1FFE7ABD5EAFFBBEFFD87B4F985C010060D7B9E7CAD6734785DD1DE660B0344DFB4EAE3C26570000D82557EE760BE485A3C23E77BA926559DBB61F7BEF09932B0000EC3AEB5CD93B2779FA8DF9D3AF0C16E479DE34CDC7DE7BC2E40A0000BBCE3A5776BD3C5D79C1C77E5C5114755DFFFBB24F8C5C010060D7B9E7CAD323C1769FDFEEBFF0F68FFDDCB22CABAAFAD87B4F985C010060D7B9E7CA5C42AB8462997B15D1912B0000EC922BF3A8EBBA288AB957111DB90200C02EB9328FA669B22C9B7B15D1912B0000EC922BF368DB56AE3C25570000D82557E6D1F7FD7ABD9E7B15D1912B0000EC922BF3902B7BC915000076C995D9F86AFE94BF090000BBE4CA6C925532DC0D73AF222E720500805D7265364992F47D3FF72AE222570000D825576693A669D77573AF222E720500805D7265362157DAB69D7B1571912B0000EC922BB329F2A2699AB9571117B90200C02EB9329B3CCFEBBA9E7B1571912B0000EC922BB3A9AAAA2CCBB9571117B90200C02EB9321BB9F2945C010060975C994DD334455ECCBD8AB8C815000076C995D9845CC9F37CEE55C445AE0000B04BAECCA66DDB2CCBE65E455CE40A0000BBE4CA6CBABE5BAFD773AF222E720500805D7265367DDFCB9547E40A0000BBE4CA9C7C3B7FC41F0400805D72654EBE9D3FE20F0200C02EB932A7F57ADDF7FDDCAB88885C010060975C99539AA65DD7CDBD8A88C815000076C995396559D6B6EDDCAB88885C010060975C99539EE74DD3CCBD8A88C815000076C99539154551D7F5DCAB88885C010060975C995359965555CDBD8A88C815000076C99539855609C532F72A2222570000D82557E654D775511473AF2222720500805D72654E4DD3645936F72A2222570000D82557E6D4B6AD5C099255B2FA5B9AA6732F0A0080F9C99539F57DBF5EAFE75EC5FC42B3AD96FFB54ABE31F7A20000989F5C99935C99745DB73B60C95277CF040060245766E66C8D49C8B6ED6845C2010030912B334B92A4288AAEEDE65EC8CC9ABAD9E68A5B67020030912B33EBFB3E7C3B4FD374EA96733E082AFC0596CBE57ABD1EEE86B9D702004014E44A2CFA61EC962CCBC2B7F63CCFDBA69D7B455FAD2CCBD56AE5463400006CC995E80CC3B0DB2D4DD39CCFB421E44AF8F5E75E050000B1902BF10A5FDC43AB846239C36E0100803BB9721442A5EC764B5DD7461000009C03B9724CA66E29F222744B9667E3BC45B7000070BAE4CAB1DACE5BB22CABEBBA1FFAB9570400009F4CAE1CBDB66D8BA258276BDD0200C089912BA763EA962449D6EB755DD57DAF5B0000386E72E504F55D3FCE5BD6EB344DC779CBA7764B51B7ABA2BE4C8ACBA4FCDF6DFAED368B79FB7BB3CE455EE575EB2C1F0080A323574E59D77553B7045559757DF7F18FEA87655E7F5F64DF6ED3FF3D3C8E6EFF3A2DDB4EB600001C0DB97216FABE2FCB325DA7A15BC24EC89877BD3DABDA1FCB7C9A57FC5AE5ABA22E9BAE6ABAF82F4B36AD33299BED2C28A44B58FFDCEB0200E04DE4CA7919BBA52AD3345D276FED96DBAC9A46137FD665DD8EC7954D957274DBB61BAED272FA5DAED665D7471F5B0000674FAE9CA9D02D5555856EC9B2EC85972DF26A9A48A465FB554B3BACB2E92E16E3992D974939F75A000078855CE15969D54C277E940FC77D9DC6B66EFBA95896B9A3C20000A22657D8AFEB87E97C95AC6AE75ECBE7ABDAEEFBE6EA614DE772CF0000F1922BECB7C8ABE91C8F18E62187D82EF33AFC82BF93E2E37F2300000E4CAEB047F83EFF6D731DAD131E3E8468B918AFCB9C4DD70F0000204272853DC257F86F0F938718262107DA4E173D735D63008068C915F698BEC7274533F7420EAB18AB6CBC93CCDC0B0100603FB9C21EBF9322E44AD18C7765997D0672B86D3F0CE1D7BC58C815008048C915F6F8B9B926587B0637529CAE0F36F72A0000D84FAEB0C774BB957E932BB3CF400EBAFDB6B9C9FDC7FE4A00001C9A5C618F6F1F9A395C5E5E4EDB47F6BEF28D2F7BF967EDDD79978FFDA600007C0DB9C21EFFDBCC1CDE3BA99882E1B9679EC649783EECECBE726FC63C7DD7EE273FFA84F7AE799A237DEE5F0F0080CF2257D8E3033387378E3B5EC892E7DEF2C27B5FFD71AF325D010088995C618F69E6F081B9CAEEACE3D13CE4D114E5E9EB9F7EF2F65FDFF8139FFB9C17B6FF73EE0A0040C4E40A7BBC77E6F0E8FC93DD41C7EE938F062377CFCC645E3812ECB98FDDDD7917D315008098C915F6F89773579E9BA8BC7A8ECADD9389CA73FBDB4F70EE0A00C069932BECF1E17357F6D6C8D3973DF79F4FDFBB7720F3F27CE65D4C570000622657D8E303E7AEEC4E48EE9E3FF364778AB2EBD589CAD3E9CAA3E73F3C5D912B0000D1922BECF1E199C3DEB9C7732FD8FB9A57A72B8FDE78F9F7892BEF9DB198AE0000C44CAEB0C77BCF5D79CB74E5D11465EF6B3E7665B0CBBF8F437BE39A9DBB0200103FB9C21EFF327378CB60E4D5D76C5FF9C2E73F7ACD0B9FF302D315008098C915F678EFB92BC7BB75EE0A0040CCE40A7B9CCFCCE17C7E530080632457D8E362317E896FBAFE6EEEE9C7A1B7E13775EE0A0040B4E40A7BFC4E8A902B75DBCFBD9083FB769B7D5F6473AF020080FDE40A7B5CA7E5B7DB745D3677734F3F0EBA0D3D16AAECE72AFFF01F0A008083922BEC91566DF81E7F9D56732FE4B05645FDED36BBCD4EFCD70400385E72853D9AAE9F2E0ED6F5C3EC3390C36D7FADF2F06B164DF7F1BF140000872457D8EF6A5D7EBBCD16F9C94E1EF27A9C20FD58E6C3DC2B0100E0397285FDA6F33A42B154ED387C987D12F2B9DB7E18A66B82259BF373000088935CE1593759359E89BECCBBFEA4261021572E932294D8EFA4987B2D0000BC44AEF0AC6118A62B1AFF5CE5D3458D679F8AFCFBB6DFFC52DF6ED38B45D6F6A77FA5660080A326577849DBF5BF5663B1842FF7EBE33F6EAAA8BBCD3160E3BD56A69B6002001033B9C22B8661B84ECB502CD38161ABA23EBAB359DA6E08CB9EAE03F66D332C32570100380A728537299B2EB4CAB7DB6C3AFF7EBAA6D6763FDAEDD3353BB71E00E088C815DE21ABDBDBAC9AAEA9F5BF8747FCFBDF17D94D5A8EE7DF0C2775CD00008093275700008048C915000020527205000088945C01000022255700008048C915000020527285E8144531DCB9E23000007285F8AC9375EFAEF30000C8152294A669D77573AF020080F9C915A21372A56DDBB9570100C0FCE40AD1C9F3BC699AB9570100C0FCE40AD109B952D7F5DCAB0000607E7285E894655955D5DCAB0000607E72858F5BAD56CFED3CF7E2175EB0556E7CC2FA0000387272858F7B39571EF5C9DB73A5AEEBA2283E77A900001C23B9C247AC76DC3D3F5DD97DC153CF7DB85C0100602257F8B8E7A62BAFCE585ED6B66D96659FBB5400008E915CE1E3762364778AF2E8057B472B2F748B5C0100602257F8B8B71C0CF6DCCE0BFABE5FAFD79FB95000008E935CE1231E4D489E3BD55EAE0000F02FE40A1FF76A8D3C3A5AEC8D07833DFD1C0000CE935CE1E39E9E61FFDCB161EF9AAEBCFD6500009C36B9C2C7ED3DD5FEEE337225499261183E77B500001C1DB9C247BC70EECADE03BDDE7B30D87ABDEEFBFE102B0700E088C81562946559DBB673AF02008099C9156224570000B8932BC429CFF3A669E65E05000033932BC4A8288ABAAEE75E05000033932BC4A82CCBAAAAE65E05000033932BC4A8DC987B150000CC4CAE109764953CBADE719AA6732F0A008079C815E29265D96AF95FABE41B732F0A008079C815E2D275DDEE80254B5DD11800E07CC915A2B35EAFB7A395B03FF7720000988D5C213A4DDD6C73C5E58C0100CE995C214649922C97CBF57A3DDC0D73AF050080D9C815625496E56AB52A8A62EE8500003027B942A442AE0C83D10A00C059932B000040A4E40A00001029B9020000444AAE10A9BEEF86BEEBFB36ECCCBD160000E6215788D1D0B759FA2B5BFF9CB67DD73AED1E00E00CC915A2D36F5A255D5F64EB1FE9FAC766FBB36B9BA11FEFC2A25B0000CE875C212EFDFD5C656C95A6598747D8C9D2F0188BA5EF7BF78D0400381F728588ECCE559A7A3D0C753F54A1581E662C3FDAB60EC5326CCCBD5800000E4EAE108BBFE62A9B5619866ADA6E672CE9FAE7B658E65E2F000007275788C2DEB9CA30349B5C3163010038537285F9ED9BABD4779B56B97B28163316008033245798D9DEB9CA43A5FC552C662C0000E746AE30A747D7017B18A4348FA62B662C0000E749AE309BBFE62A4D1252A4EFAB872CF9EBD1FFB73FBEC68C0500E04CC815E6B13B57A9EB64E89F6D95C78FFEBE58CC5800004E9E5C6106BB7395D02A7D5F767D19B679F63B3C5316D75393EC3EAAF226BCBEC87EF77D31BD3EBCD18C0500E0B4C915BEDADF739555DF955D57F45D115264BC7B7D783E1D8B655329E5F4A8CAEBE9F9B02DF2CBF1F5FDF8AEA64ECC5800004E985CE14BEDCE55AAB1558AB6CBBB87B9CAF4FC54326571D56D9A24A4CBEEF3613FBC782A9CF0DE103C662C0000A74AAEF07576E72A55B5EC42A88C8F226CB77395DD6D2896DDB9CAEE76F3AE62FA84502C662C00002749AEF045FE9AAB54CBB6CDDB366BBBB01D93A328AE76E7272FEF878C19DFBE79EFF439E103CD5800004E8F5CE12B0C7FCD551663A88C8FB134BAA95BDA4DB1EC9BB13CDADEB7CA7FEF1D779A36ABABE5A319CB9D5A01003872728583EBFB6E67AEB2689BB469D2A93136DBFFF68BFCCFAB73958777FDBDDD7C66553E9EB128160080A3265738B86108B9F2736C95F2BF56699B4D694CDDB2B32DF267672CE35C65F3AEA7DBF1BD0FC5B2099B9F4D53C57C12CB6AB57AFB3FAD363EFC394F7700008E855CE1E03667ADFC4C37A7AC349BA8D89DABB43B7392F0084DF2DCB92B45FE67EF4CE67E7F532CD5E690B0F0B39ABAEABA2EDA62D92D874715B15B174F4365F59ABD9FB3F7070100C44FAE707043BF99AE8C1392F1462BDB32E9FE3E77656A9597CF5D298AABDD776DDF3B7DE6D82AD32BD73FEBBA9C72259EE3C1DE1218CFFDD3EE6B5EFE118F3EE74EAE0000C74CAEF015FAAEDD9E55128AE5A14FC66B826DAFF1F5C25CE5AF194B71B5BD9ED8C37BC74F9BE62A53AB5455D1344DDBB62157F23CCFB22C4DD3A228CA8DBAA9DB8D19072F8F42E2E93FDD3DA997173EE7E57F7AB4235A0080232257F80A210CBAB649D7FFCD581EEEB8727FFB94E7EEAFF2DCFD5876DF7B7FEB95F4AF5609A6E94A10CAA46BBBBAAEABAA0AB952E445B69124C95402593A3D91857F9D5E135E3FBEABEB3EEB2FF0C683B81EEDEFBEFD2D1FF5E8273EFACC17B20700204E72852F32F443DBD63B339664A758CA67AE03765D3E733F96F15DE33DEFC74F081FB59DAB946548977A6C95B135BA37DE7D65D326A3A955AAB24AD3749AC94C5FF143D84CCF4C49338E68EAFB11CD78BCD9FBBD302D797A10D707F6EFFEAE94977F280040B4E40A5F65B8DB0C3AEAED8CA56942B1147D5F8647915F3E9AA254E5F5F44F215A1E9FC192FDEEC75619DFDB8456D9CE55CAE2AF56E93FED4E919BE9D0A6699A769AC014C5FD8866BD5E4F611076A667A6A3CEC26BA603D282479FB6779672F7E460ADE732E38D239A573F0700207E72852F320D3A1E8AE57EC6D234EB6ED3247D1FBEFEFFDECE4FAAF2A6EFABA1AFFACD632C9687B94A3EB5CAE65D7BE72AD3415C5F7F4DB0E9A8B37144535755394E69F23C9F6632DB7ED8DD0FC2ABA6B74C479D3DCD95A76396BBF74C579EDB010038167285AFB567C6B27E2893FB194B689561A81F3DA6194B489AA961C2B6A9D75F3057F95C2118429C84ED74D4593005CCF6A8B375B2DE56CDF49AE92DE1F7EA877EFB212F4F57B62FDBDD792E7E0000622657F852CFCD58C60219AAA795F2F431BD32BC259EB9CA5BEC3D3AEBE97F8626995E197E9DA955F23C9F7A667B6180E9A8B3F0CCF482B06DDA3D479D3D37A5912B00C011912BCCE1C98CA56DD29D5C69C2F6EEC976F3FCF89AB1558E6DAEB2EB2D539147CFEFFE67F835A7794B555553AEE4593E9D36F3E863C3F353D2845786D7EFFD71000031932BCCE099194BDA3F14CB4E9FFCB7DF6F5BE5A8E62AB398862D4DDB940FA6B368B6170608FF39F71A01005E275798CF8B3396939CABC4C38C0500380A7285D9BC3A63D94E57CC553E9D5C01008E825C616EAF9FC762AEF2F9E40A007014E40A337B79C662AE7220720500380A7285383C3F6331573904B902001C05B942149E9BB198AB1C885C01008E825C21264F662CFFCD552A7395CF24570080A3205788C89319CBCF691B5AA51953C55CE5D3C81500E028C815E2F33063699AAAA9ABBA2EC7FB1D9AAB7C2AB902001C05B94274B63396BEEBC74069BB69A862AEF289E40A007014E40AB11A36DDD28FDD72BF1DCC553E8D5C01008E825C216AC3DFE65ECEE9902B00C051902B708EE40A007014E40A51CBF37CEE259C26B902001C05B942D47CAB3E107F5800E028C815A2E65BF581F8C302004741AE1035DFAA0FC41F1600380A7285A8F9567D20FEB000C051902B44CDB7EA03F18705008E825C215E7DDFAF93F5DCAB384D720500380A7285788DB9B2962B0721570080A320578857C8952449E65EC569922B00C051902BC4CB74E570E40A007014E40AF172EECAE1C81500E028C815E2D5755D9AA673AFE2A42449B2FA9BBF30001033B942BCDAB6F565FA73A559BADB2A7991675936F7A200009E25578857C8155FA63F57DFF7DB56495649A8C1AEEDE65E1400C0B3E40AF1325D3984749D2E97CB902B2105FD790180C8C915E265BA7208755D27ABF10C96222FC2FEDCCB010078895C215EA62B07727F30987BDA0000D1932BC4ABAEEBA228E65EC509AACA2AE44A5996732F0400E015728578855CC9F37CEE559CA0E16E08B9D20FFDDC0B010078855C215EA62B0000674EAE102FD31500803327578897E90A00C099932BC4ABAA2AB9020070CEE40AF12ACB3214CBDCAB000060367285785565E562BB0000E74CAE102FD395A26E57457D99149749F9BFDBF4DB6D16F3F6F7669D8BBCCAEB7698FB4F07009C06B942BCCA8DB9573183AE1F9679FD7D917DBB4DFFF7F038BAFDEBB46C3BD90200FC13B942BCCE73BA9255ED8F653ECD2B7EADF25551974D5735DD10FD37FF699D49D96C6741215DC2FAE75E170070C4E40AF12A8AA2AECFEBCBEE6D564DA3893FEBB26EC7BBCE4F957274DBB61BAED272FA5DAED665D7471F5B004094E40AF12AF2A2699AB957F1751679354D24D2B29D7B2D9FA36CBA8BC57866CB6552CEBD1600E028C915E27556D395B46AA6133FCA87E3BE4E635BB7FD542CCBFC5CFE4F09007C22B942BCF23C3F93E94AD70FD3F92A59D5CEBD96CF57B5DDF7CDD5C39AAE9F7B2D00C091912BC4EB7CA62B8BBC9ACEF188611E7288ED32AFC32FF83B293EFE370200CE925C215E799EB74D3BF72A0E2E7C9FFFB6B98ED6090F1F42B45C8CD765CEA6EB070000BC915CE11D56ABD50BFFF9F28B3F20CBB2B66DFFF143E217BEC27F7B983CC4300939D076BAE899EB1A0300EF22577887977365F59AF7FEB8902B5DDBFDEBA2A3377D8F4F8A133F4BA718AB6CBC93CCDC0B01008E895CE1ADB6BDF1C614315D79A3DF491172A568C6309B7D0672B86D3F0CE1D7BC58C81500E01DE40A6FB2DB2A4F9FDC7DE6B3462B7767932B3F37D7046BCFE0468AD3F5C1E65E0500704CE40A6FB2B73AF6E6CAABFB6F7726B932DD6EA5DFE4CAEC3390836EBF6D6E72FFB1BF1200709EE40AEF3055C70BC393CFCD95F57ADDF7A77F21A96FFF3673B8BCBC7CFB3F5D6E7CF8739EEEBCCB3FFEA600C019922BBCD5B6555E7ECD271E0C7626B9F2BFCDCCE1C3538B500E7BF7EF1EA2627A7EF2E85F5FB6F7731E3DF3AEED3447FAD43F1E0070E2E40A6FF2748AF2EA79F61FAE94AD33C9950FCC1C5E088CE75EB0F7435EFE118F3EE7CE740500F87272858F78F584FBBBB74D635E7626B932CD1CFE71BAF26872F2DC74E5E98CE5B9C9CC739FB3FBCC7B672CFF73EE0A00F04E728577D80E4C5EC895A7E7B17CB858CE2457DE3B7378CB415C777F9FA6F268F0F2968F7AF4131F7DE673139BCFFD4D0100E40A6FF2E8C8AEE7CEB37FE154FB0F444B9224C370FA97F7FDC473571E3DBF9DA55C3E737ECB5BF6EF1EE2C4B92B00C0D7932BC4EB1F4F7D3916FF3273D83B4BB9FBFB60ADBD3BBBEF7A7544F3EAE7BC91E90A00F05E7285789D49AE7CF8DC954775F1F46C93CBBFCF5DB97B321579FB74E5D1F31F9EAEC81500E05DE40AF13A935CF9D8CCE1D1FC64F7C9E75EF37424F2817357EEEE1EC7CFDB99AE0000EF255788D799E4CA7BCF5DD99E4972F7E2B464EF2B5F988A5CBEEDCA60BB9FF3DE198B73570080F7922BC4EB4C72E51FCF5D79752AF2E8F9A72FDB7DF1739FFFE8357B7FDCAB4C570080F7922B44AAEFFBF57A3DF72ABEC23FDE77E588B6CE5D0100DE4BAE10A9F3C995F399399CCF6F0A007C16B942A4CE27572E16E397F8A61B6F8819C30CE470DBF09B3A7705007817B942A4CE27577E2745C895BAEDE75EC8C17DBBCDBE2FB2B95701001C13B942A4CE2757AED3F2DB6DBA2E9BBBB9A71F07DD861E0B55F673957FF80F05009C21B942A4BAAE4BD374EE557C85B46AC3F7F8EBB49A7B2187B52AEA6FB7D96D76E2BF2600F0B9E40A916ADB36CBCEE2C0A1A6EBA78B8375FD30FB0CE470DB5FAB3CFC9A45D37DFC2F05009C1FB942A4BAB63B935C09AED6E5B7DB6C919FECE421AFC709D28F653ECCBD1200E0B8C81522753ED395603AAF23144BD58EC387D927219FBBED8761BA2658B2393F0700E0EDE40A913AAB5C096EB26A3C137D9977FD494D2042AE5C264528B1DF4931F75A0080E3235788D4B9E5CA300CD3158D7FAEF2E9A2C6B34F45FE7DDB6F7EA96FB7E9C5226BFBD3BF523300F0E9E40A916A9AA6C8CFEBFF1FDF76FDAFD5582CE1CBFDFAF88F9B2AEA6E730CD878AF95E926980000EF255788545DD745715EB972B799B15CA7652896E9C0B055511FDDD92C6D3784654FD701FBB6191699AB00001F26578854D334797EA6B7142C9B2EB4CAB7DB6C3AFF7EBAA6D6763FDAEDD3353BB71E00F8477285489DE774655756B7B759355D53EB7F0F8FF8F7BF2FB29BB41CCFBF194EEA9A0100C02CE40A913AC3735700007844AE10A9AAAACAB29C7B150000CC49AE1029B90200805C2152A155AAB29A7B150000CC49AE1029D3150000E40A912A37E65E05000073922B44CA74E5A0CEF69E3600C071912B442A7C9FAEEB7AEE559CACD56A35F71200005E27578854511472E570E40A007014E40A91325D3928B902001C05B942A44C570E4AAE00004741AE1029D39583922B00C051902B442AE44AD33473AFE264C91500E028C8152295A669DBB673AFE264C91500E028C815229565995C391CB902001C05B942A44C570E4AAE00004741AE10976495ACFE16BA65EE459D20B902001C05B9425CB22C5B2DFF6B957C63EE459D20B902001C05B9425CBAAEDB1DB064A933580E42AE00004741AE109DF57A7DDF2A5916F6E75ECE69922B00C051902B44A7A99B6DAEB853E481C81500E028C815629424C972B95C27EBE16E987B2DA749AE00004741AE10A3B22C935592174EB23F14B902001C05B942A4C2F7E9BEEFE75EC5C9922B00C051902B708EE40A007014E40A9C23B902001C05B902E748AE00004741AEC039922B00C051902B708EE40A007014E40A9C23B902001C05B9424C86BBB6AEDBB2AAD26CFB68CAAAABEBC1458D3F955C01008E825C2102C3506559767DBBB8F8B9F8FE63EF6379F133BDBA0EF5D2775DA89A6170B7FB7F22570080A3205798592890D5CFDF8BEF53A8FC0CC5925CFE59FFB9CA6F16D9CDEDFACF75F2FBCFF2E2D7B65BC28BCB753AF48362F917720500380A7285D9744D1B52E4BE432E7E863869B2ECAE6DEFBAEED16368DB26CBC30B960FE397D5AFCBB6AAFB7EAC963BD9F27E720500380A7285793445B9FCF16B0A95FC763134CDA64CFA97B743DDE4378BED1CA6CAF2502C63AE289677922B00C051902BCC20B4CA749A4AF2FB4F57564FC7292F3FFAAA5AFDBA9CC62CA158BAAE1B06C786BD8F5C01008E825CE1AB3565351DD3955EDD6C0EFD7A65A2B27FDB76EBABEBE98C9769C6E2A8B0BDC29FA5DDA8EBBA2CCBAA1A2F6A10244932F7D200005E2757F8525DD34EC780ADFF5CED3D4DE55D8FE4CFD57438595355673B6309A93605C9582365551445A891344D4390AC56ABB00DFBE199F07CB931BDB877616800E018C815BED4746EFDEAD7E5E664953D9393BEAEAB649D5EDDA47FAE43D2846D76735BAFD3FD3396A69DAE2A369E793F7D053FC55A69BBF17F4D13A2AC0ABD91E7F9381F49B3D5C67ABD9E0626D3BFD6751DFE14E1F567586E00C0E9912B7C9D3249A761C8FEF3559A3694C9B3F75DF9F1AB5C257BCF63595C8C2FC896AB2EFCE77454D8517974BC5630CD43A6F148906E844A99E627A15BDA4D91CCBD70008083932B7C95E16E3A0CAC582C9FCE49FAB2DAFCEBEE6D22F7EC8FA7BB34EDA3F7860F9C7AA6A99B7E0C96E80E73FAEB78ADEAFE78AD6D9084EDF49FE1F96942324E531CAF05002057F832559A4DA395F130B0B6BD6BBBEDB62B1F2E6AFC8647F2FB72F7BD611B3E703A773F4F92E95BFE0B0396F04F210CF23CFFDCDF6ED3176DD334D378247CFE341299C623539084FFACCAFF8ED70A8E6E100400F0C5E40A5F64FDE77A2C8A9BC5D084C668A76899F64381BC3A57D9DD1FE7330FEF1D3FE7E128B2D5EF3F6DD3BE70CE7DA885D583772DFEB9EB6BADD7EBE9D3B2F1E8ADECFE78ADCAF15A00009F43AEF02586612A8D26CB86BA19EA3A6CFB715B97CBD51BE72ABB8FB628361F72FF394D964F3D535775D7764FCFB9AF9B7A7B2AC8DE5C717D2D008008C915BE425BD5D37DE887AAEAAB6AA8EACD76DCDF5CDAEBAD7395ED7E7EB378F439D3F16065963F3A1E2CEC6F6720BB5C5F0B00207E7285AF50E7C5C33DECCBBE2CBBE27E5BAFD30F8C56C613EB7FFEEA8B87CFD97CE66A3CA2EC479EACEF8F07EBEF8F07BBAF93E5E35C71BC160040FCE40A5F613ACF3EBDBAEE8AA2CB8BED76BAA8D7BBE62ADBFDDDCF09DBFB73639649E890E98AC6D38FEEC75BB9D4799E4F57045EAFD7C92A79EFB92B0000CC42AEF015A65CC9AE6FDB2C6BF37CBBCDAF6F3E365D098F3A59EF7E5A68A1C5E6EE2BD3D864EFF5C19A76BC72D7582C4932CBDF01008077912B7C85324D17DF7FA6D737635A8C8F7CDAC9C65C79F75C65DAA99264FB39E3475DDDDC4F57EA66EFD9F600001C1DB9C257D81E0CF668BAB27330D8FB2F0E96E5BB9FB6FE73F5EA74050080E32257F80A9B53ED7F8EA7DAFF7DEECACEA9F6EF9BB1AC7EFE7E74EECAE6E62D3F8A646DBA02007032E40A5F617321E31FCB8B9F212DB6D7F2EACA717FF9D7858CDFFAC8AE6F76AF30161E8B8BF1F922CB4C5700004E865CE12B0C7D3FDD17A55EA78FEE9752AD920F9CBB3266CFCEE76CA634E3F35559FD375D0100E0C8C915BEC470974CE796DCDC3EDCCFFEBF7BDB4FC771BDFD512C96DBF74EF7B6CFAE6F179BFBBA84FC99A62BDBFBAE000070BCE40A5F62B82B37A7A92C7FFCEAABFA2EE444D36CB66DD8B645119E7FE35C657D79B5FBDEB01F7265B119DDA48B655DD72157FA71B862BA020070F4E40A5FA4EFBAA949F2DB45C88CBBB6DBDD866259FD7AFD24966938F3E8BDE1C9F15F2F7E5665197265BC557DD719AD00009C00B9C25719EEF2E934958B1F7D59DD75DD5DD7EF6E87A6F9FBBAC67FCD55563F7FD7EBF4E9BBBAB29ACE8A496F9775553B120C00E094C815BE48E887BEEF57BFC6D35456BF7EDF35EDA6371E3F86A6AD56497EB3585F5EADFF5C856D68983ACB9E797133CD6442CC949BD14AC895AE7315630080132157F83AA158DABA5EFE188721C99FAB87EAE89FD9BEFCAFE3763A7D7FF9E3579165F7ADB2B92698D10A00C069902B7CA1E12EB4C4E69691E3215EEB502CCFCC585E7D0C4D33DDC67EF1FD679EACEBAAFEEFAC15478201009C0AB9C2D7DA144B95E5DB9BD38F170A7B6D8AF268DB57D56A7373C9E5C54EAB345A0500E0D4C815BED6707F12CB582C9B53E417179BEB7D35CDDB862A6D7A7333BD71F9E3576895AAAAA65671277B0080D32357F8720FC5D254F574E6FD664EF22BBDBE69B27CBC36F1BEF358C23F8DF782BCB8BF5C5878E378BECAC35C45AB00009C24B9C20C868DAEEB4266E4AB64F71E91CB8B9F2145D67FAEB29BDBF048FE5CAD7E5F6E2B65BABF4AB65C8DD7017BD42AFDE06A6000002746AE309387194B8896A66EF2641DCA6479F1FCFDEC2F7E2697572154AA4DA834E365C09AE9DC7A7315008053255798CD3463998A651C91346D5D555596E7EB3464C9F651ACD322CBAA32FC5BD58C03954DA96CAE59FC5FABA815008053245798DBE65A61433F1E1B160A64EA962948A611CAFDB669A6E7DB8D7EEC947E0A9EB97F0100000E45AE1081CD8161A158C604E9C661CB942E53BDDC6F77F4BD560100380B7285584CC7746D8F10BBAF97A94C36FB53D24CAF997BB100007C05B9427476BB65BBBFDD0200703EE40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B9020000444AAE00000091922B000040A4E40A00001029B902000044EAFFC793AAD70BE9D81C0000000049454E44AE426082, '28', 'leave2.png');
+
+-- ----------------------------
+-- Table structure for `jbpm4_participation`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_participation`;
+CREATE TABLE `jbpm4_participation` (
+  `DBID_` bigint(20) NOT NULL COMMENT '记录标识',
+  `DBVERSION_` int(11) NOT NULL COMMENT '记录版本号',
+  `GROUPID_` varchar(255) DEFAULT NULL COMMENT '组ID',
+  `USERID_` varchar(255) DEFAULT NULL COMMENT '用户ID',
+  `TYPE_` varchar(255) DEFAULT NULL COMMENT '参与者类型',
+  `STATE_` varchar(255) DEFAULT NULL COMMENT '标识参与者的状态',
+  `TASK_` bigint(20) DEFAULT NULL COMMENT '任务的引用',
+  `SWIMLANE_` bigint(20) DEFAULT NULL COMMENT '泳道的引用',
+  PRIMARY KEY (`DBID_`),
+  KEY `IND_FK_PART_TASK` (`TASK_`),
+  KEY `IND_FK_PART_SWIMLANE` (`SWIMLANE_`),
+  CONSTRAINT `FK_PART_SWIMLANE` FOREIGN KEY (`SWIMLANE_`) REFERENCES `jbpm4_swimlane` (`DBID_`),
+  CONSTRAINT `FK_PART_TASK` FOREIGN KEY (`TASK_`) REFERENCES `jbpm4_task` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务参与者表';
+
+-- ----------------------------
+-- Records of jbpm4_participation
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_property`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_property`;
+CREATE TABLE `jbpm4_property` (
+  `KEY_` varchar(255) NOT NULL,
+  `VERSION_` int(11) NOT NULL,
+  `VALUE_` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`KEY_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of jbpm4_property
+-- ----------------------------
+INSERT INTO `jbpm4_property` VALUES ('next.dbid', '1', '10001');
+
+-- ----------------------------
+-- Table structure for `jbpm4_swimlane`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_swimlane`;
+CREATE TABLE `jbpm4_swimlane` (
+  `DBID_` bigint(20) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `NAME_` varchar(255) DEFAULT NULL,
+  `ASSIGNEE_` varchar(255) DEFAULT NULL,
+  `EXECUTION_` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`DBID_`),
+  KEY `FK_SWIMLANE_EXEC` (`EXECUTION_`),
+  KEY `IDX_SWIMLANE_EXEC` (`EXECUTION_`),
+  CONSTRAINT `FK_SWIMLANE_EXEC` FOREIGN KEY (`EXECUTION_`) REFERENCES `jbpm4_execution` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='泳道信息表';
+
+-- ----------------------------
+-- Records of jbpm4_swimlane
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `jbpm4_task`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_task`;
+CREATE TABLE `jbpm4_task` (
+  `DBID_` bigint(20) NOT NULL,
+  `CLASS_` char(1) NOT NULL,
+  `DBVERSION_` int(11) NOT NULL,
+  `NAME_` varchar(255) DEFAULT NULL,
+  `DESCR_` longtext,
+  `STATE_` varchar(255) DEFAULT NULL,
+  `SUSPHISTSTATE_` varchar(255) DEFAULT NULL,
+  `ASSIGNEE_` varchar(255) DEFAULT NULL,
+  `FORM_` varchar(255) DEFAULT NULL,
+  `PRIORITY_` int(11) DEFAULT NULL,
+  `CREATE_` datetime DEFAULT NULL,
+  `DUEDATE_` datetime DEFAULT NULL,
+  `PROGRESS_` int(11) DEFAULT NULL,
+  `SIGNALLING_` bit(1) DEFAULT NULL,
+  `EXECUTION_ID_` varchar(255) DEFAULT NULL,
+  `ACTIVITY_NAME_` varchar(255) DEFAULT NULL,
+  `HASVARS_` bit(1) DEFAULT NULL,
+  `SUPERTASK_` bigint(20) DEFAULT NULL,
+  `EXECUTION_` bigint(20) DEFAULT NULL,
+  `PROCINST_` bigint(20) DEFAULT NULL,
+  `SWIMLANE_` bigint(20) DEFAULT NULL,
+  `TASKDEFNAME_` varchar(255) DEFAULT NULL,
+  `SYSTEM_CODE_` varchar(32) DEFAULT NULL COMMENT '系统标识',
+  PRIMARY KEY (`DBID_`),
+  KEY `FK_TASK_SWIML` (`SWIMLANE_`),
+  KEY `FK_TASK_SUPERTASK` (`SUPERTASK_`),
+  KEY `IDX_TASK_SUPERTASK` (`SUPERTASK_`),
+  KEY `IND_FK_TASK_SUPERTASK` (`SUPERTASK_`),
+  KEY `IND_FK_TASK_SWIML` (`SWIMLANE_`),
+  CONSTRAINT `FK_TASK_SUPERTASK` FOREIGN KEY (`SUPERTASK_`) REFERENCES `jbpm4_task` (`DBID_`),
+  CONSTRAINT `FK_TASK_SWIML` FOREIGN KEY (`SWIMLANE_`) REFERENCES `jbpm4_swimlane` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='任务表';
+
+-- ----------------------------
+-- Records of jbpm4_task
+-- ----------------------------
+INSERT INTO `jbpm4_task` VALUES ('10026', 'T', '1', '经理审批', null, 'open', null, 'manager', 'manager.html', '0', '2014-07-10 14:55:00', null, null, '', 'leave.10008', '经理审批', '\0', null, '10008', '10008', null, '经理审批', null);
+
+-- ----------------------------
+-- Table structure for `jbpm4_variable`
+-- ----------------------------
+DROP TABLE IF EXISTS `jbpm4_variable`;
+CREATE TABLE `jbpm4_variable` (
+  `DBID_` bigint(20) NOT NULL COMMENT '记录标识',
+  `CLASS_` varchar(255) NOT NULL COMMENT '鉴别标识',
+  `DBVERSION_` int(11) NOT NULL COMMENT '记录版本号',
+  `KEY_` varchar(255) DEFAULT NULL COMMENT 'key',
+  `CONVERTER_` varchar(255) DEFAULT NULL COMMENT '转换器的引用',
+  `HIST_` bit(1) DEFAULT NULL COMMENT '是否开启历史',
+  `EXECUTION_` bigint(20) DEFAULT NULL COMMENT '执行的引用',
+  `TASK_` bigint(20) DEFAULT NULL COMMENT '任务的引用',
+  `LOB_` bigint(20) DEFAULT NULL COMMENT '子类org.jbpm.pvm.internal.type.variable.BlobVariable的引用',
+  `DATE_VALUE_` datetime DEFAULT NULL COMMENT '子类org.jbpm.pvm.internal.type.variable.DateVariable的属性date',
+  `DOUBLE_VALUE_` double DEFAULT NULL COMMENT '子类org.jbpm.pvm.internal.type.variable.DoubleVariable的属性',
+  `CLASSNAME_` varchar(255) DEFAULT NULL COMMENT '子类HibernateLongVariable和HibernateStringVariable的标识',
+  `LONG_VALUE_` bigint(20) DEFAULT NULL COMMENT '子类HibernateLongVariable的属性',
+  `STRING_VALUE_` varchar(255) DEFAULT NULL COMMENT '子类HibernateStringVariable的属性',
+  `TEXT_VALUE_` longtext COMMENT '子类TextVariable的属性text',
+  `EXESYS_` bigint(20) DEFAULT NULL COMMENT '执行（流程实例）的引用',
+  PRIMARY KEY (`DBID_`),
+  KEY `IDX_VAR_EXECUTION` (`EXECUTION_`),
+  KEY `IDX_VAR_EXESYS` (`EXESYS_`),
+  KEY `IDX_VAR_LOB` (`LOB_`),
+  KEY `IDX_VAR_TASK` (`TASK_`),
+  CONSTRAINT `FK_VAR_EXECUTION` FOREIGN KEY (`EXECUTION_`) REFERENCES `jbpm4_execution` (`DBID_`),
+  CONSTRAINT `FK_VAR_EXESYS` FOREIGN KEY (`EXESYS_`) REFERENCES `jbpm4_execution` (`DBID_`),
+  CONSTRAINT `FK_VAR_LOB` FOREIGN KEY (`LOB_`) REFERENCES `jbpm4_lob` (`DBID_`),
+  CONSTRAINT `FK_VAR_TASK` FOREIGN KEY (`TASK_`) REFERENCES `jbpm4_task` (`DBID_`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='流程变量表';
+
+-- ----------------------------
+-- Records of jbpm4_variable
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sys_message_sender_implement`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_message_sender_implement`;
+CREATE TABLE `sys_message_sender_implement` (
+  `ID` varchar(32) NOT NULL COMMENT 'ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '名称',
+  `CLASS` varchar(200) DEFAULT NULL COMMENT '消息发送实现类',
+  `FLAG` varchar(1) NOT NULL COMMENT '启用标志',
+  `STATUS` varchar(1) DEFAULT NULL COMMENT '逻辑删除',
+  `MODTIME` datetime DEFAULT NULL COMMENT '修改时间',
+  `MODIFIERID` varchar(32) DEFAULT NULL COMMENT '修改人id',
+  `COMMITERID` varchar(32) DEFAULT NULL COMMENT '创建人id'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='消息发送实现类表';
+
+-- ----------------------------
+-- Records of sys_message_sender_implement
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sys_message_template`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_message_template`;
+CREATE TABLE `sys_message_template` (
+  `ID` varchar(32) NOT NULL COMMENT '唯一标识',
+  `CODE` varchar(32) DEFAULT NULL COMMENT '消息模板编号',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '消息实现类名称',
+  `TITLE` varchar(100) DEFAULT NULL COMMENT '动态消息TITLE',
+  `TEXT` varchar(500) DEFAULT NULL COMMENT '动态消息TEXt',
+  `FLAG` char(1) NOT NULL COMMENT '状态标识',
+  `STATUS` char(1) DEFAULT NULL COMMENT '是否删除',
+  `MODTIME` datetime DEFAULT NULL COMMENT '操作时间',
+  `MODIFIERID` varchar(32) DEFAULT NULL COMMENT '操作人ID',
+  `COMMITERID` varchar(32) DEFAULT NULL COMMENT '创建人ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='工作流动态消息模板';
+
+-- ----------------------------
+-- Records of sys_message_template
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `sys_workflow_table`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_workflow_table`;
+CREATE TABLE `sys_workflow_table` (
+  `ID` varchar(32) NOT NULL COMMENT '唯一标识',
+  `FLAG` varchar(1) NOT NULL COMMENT '启停标识',
+  `STATUS` varchar(1) NOT NULL COMMENT '是否删除',
+  `MODTIME` datetime NOT NULL COMMENT '操作时间',
+  `MODIFIERID` varchar(32) DEFAULT NULL COMMENT '提交人ID',
+  `COMMITERID` varchar(32) NOT NULL COMMENT '创建人ID',
+  `EXPENSEACCOUNTNUMBER` varchar(32) NOT NULL COMMENT '单据编号 ',
+  `EXPENSEACCOUNTDATE` varchar(20) NOT NULL COMMENT '申请日期',
+  `EXPENSEACCOUNTAMOUNT` int(11) DEFAULT NULL COMMENT '单据金额',
+  `DEPARTMENT` varchar(50) DEFAULT NULL COMMENT '员工所属单位',
+  `INPUTPERSON` varchar(50) NOT NULL COMMENT '录入人',
+  `REIMBURSEMENTREASON` varchar(100) NOT NULL COMMENT '事由',
+  `EXPENSEACCOUNTSTATUE` varchar(1) NOT NULL COMMENT '单据状态 0,未提交:1,审批中:2,审批结束:3,异常终止:4,退回',
+  `ASSIGNEE` varchar(50) DEFAULT NULL COMMENT '负责人',
+  `CREATETIME` varchar(20) DEFAULT NULL COMMENT '提交时间',
+  `BUSINESSTYPEID` varchar(32) NOT NULL COMMENT '业务类型ID',
+  `PROCESSNAMEID` varchar(32) NOT NULL COMMENT '流程名称ID',
+  `PROCESSINSTANCESID` varchar(32) DEFAULT NULL COMMENT '流程实例ID',
+  `PROCESSID` varchar(32) NOT NULL COMMENT '流程ID',
+  `ANAME1` varchar(50) DEFAULT NULL COMMENT '扩展属性名1',
+  `AVALUE1` varchar(50) DEFAULT NULL COMMENT '扩展属性值1',
+  `ANAME2` varchar(50) DEFAULT NULL COMMENT '扩展属性名2',
+  `AVALUE2` varchar(50) DEFAULT NULL COMMENT '扩展属性值2',
+  `AVALUE3` varchar(50) DEFAULT NULL COMMENT '扩展属性值3',
+  `AVALUE4` varchar(50) DEFAULT NULL COMMENT '扩展属性值4',
+  `ANAME3` varchar(50) DEFAULT NULL COMMENT '扩展属性名3',
+  `ANAME4` varchar(50) DEFAULT NULL COMMENT '扩展属性名4',
+  `MODEL` varchar(50) DEFAULT NULL COMMENT '型号',
+  `AMOUNT` varchar(50) DEFAULT NULL COMMENT '数量',
+  `MODIFYNUMBER` int(11) DEFAULT NULL COMMENT '修改次数',
+  `MODIFYDEPARTMENT` varchar(50) DEFAULT NULL COMMENT '提交人部门'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务表---DEMO';
+
+-- ----------------------------
+-- Records of sys_workflow_table
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `workflow_articulated_process`
+-- ----------------------------
+DROP TABLE IF EXISTS `workflow_articulated_process`;
+CREATE TABLE `workflow_articulated_process` (
+  `ID` varchar(32) NOT NULL COMMENT 'ID，唯一标识',
+  `PROCESSDEFINITION` varchar(32) NOT NULL COMMENT '流程ID',
+  `AGENCY` varchar(32) NOT NULL COMMENT '单位ID',
+  `BUSINESS` varchar(32) NOT NULL COMMENT '业务类型ID',
+  `BUSINESSNAME` varchar(255) DEFAULT NULL COMMENT '业务类型名称',
+  `OPERATOR` varchar(32) DEFAULT NULL COMMENT '操作人',
+  `OPERANT_TIME` datetime NOT NULL COMMENT '操作时间',
+  `FLAG` char(1) NOT NULL COMMENT '状态标识',
+  `STATUS` char(1) NOT NULL COMMENT '逻辑删标识',
+  `MODTIME` datetime NOT NULL COMMENT '修改时间',
+  `COMMITERID` varchar(32) NOT NULL COMMENT '创建人ID',
+  `MODIFIERID` varchar(32) NOT NULL COMMENT '修改人ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='工作流流程挂接表';
+
+-- ----------------------------
+-- Records of workflow_articulated_process
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `workflow_authorized_management`
+-- ----------------------------
+DROP TABLE IF EXISTS `workflow_authorized_management`;
+CREATE TABLE `workflow_authorized_management` (
+  `ID` varchar(32) NOT NULL COMMENT 'id',
+  `AUTHORIZER` varchar(32) NOT NULL COMMENT '授权人ID',
+  `BUSINESSTYPE` varchar(42) NOT NULL COMMENT '业务类型',
+  `AUTHORIZEDPERSON` varchar(32) NOT NULL COMMENT '被授权人ID',
+  `AUTHORIZEDSTATE` char(1) NOT NULL COMMENT '授权状态0,未生效,1,生效,2,过期失效',
+  `STARTTIME` datetime NOT NULL COMMENT '开始时间',
+  `ENDTIME` datetime NOT NULL COMMENT '结束时间',
+  `FLAG` char(1) NOT NULL COMMENT '启停标识',
+  `STATUS` char(1) NOT NULL COMMENT '状态标识',
+  `MODTIME` datetime NOT NULL COMMENT '修改时间',
+  `COMMITERID` varchar(32) NOT NULL COMMENT '创建人ID',
+  `MODIFIERID` varchar(32) NOT NULL COMMENT '修改人ID',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='授权管理表';
+
+-- ----------------------------
+-- Records of workflow_authorized_management
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `workflow_behavior_management`
+-- ----------------------------
+DROP TABLE IF EXISTS `workflow_behavior_management`;
+CREATE TABLE `workflow_behavior_management` (
+  `ID` varchar(32) NOT NULL COMMENT 'ID',
+  `NAME` varchar(50) NOT NULL COMMENT '行为名',
+  `CODE` varchar(32) NOT NULL COMMENT '行为编号',
+  `CLASSPATH` varchar(100) NOT NULL COMMENT '实现类或方法名',
+  `EV_TYPE` varchar(32) DEFAULT NULL COMMENT '事件类型',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='行为设置';
+
+-- ----------------------------
+-- Records of workflow_behavior_management
+-- ----------------------------

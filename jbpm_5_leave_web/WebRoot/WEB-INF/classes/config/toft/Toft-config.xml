@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Toft平台配置信息
+-->
+<toft-config>
+	<!-- debug模式下，对配置文件会每次读取，不对数据进行缓存！ -->
+	<debug>false</debug>
+	<struts>true</struts>
+	<!-- 用户只能单点登录，不能重复-->
+	<singleUserInstance>false</singleUserInstance>
+
+	<!-- 默认设置 -->
+	<file-config>
+
+		<!-- 表的位置定义 配置文件名 -->
+		<tablePoolFileName>
+			config/toft/Toft-TablePool.xml
+		</tablePoolFileName>
+		<!-- 初始化的配置文件 -->
+		<initPoolFileName>
+			config/toft/Toft-InitPool.xml
+		</initPoolFileName>
+		<!--  交易池的配置文件名 -->
+		<servicePoolFileName>
+			config/toft/Toft-ServicePool.xml
+		</servicePoolFileName>
+
+		<!-- 业务日志配置文件名,需要国际化支持，后缀中会自动增加 语言种类,并自动填加.xml -->
+		<actionLogConfigFileName>
+			config/toft/Toft-ActionLog-config
+		</actionLogConfigFileName>
+
+		<!-- 代理层对参数格式转换与检查的函数定义配置文件名 -->
+		<paramFormatSupportFileName>
+			config/toft/ParamFormatSupport
+		</paramFormatSupportFileName>
+
+		<!-- 错误码配置文件 -->
+		<errorCodeConfigFileName>
+			/config/toft/ToftErrorCode.properties,/config/toft/ToftSYSErrorCode.properties,/config/toft/ToftWorkFlowErrorCode.properties,/config/toft/ToftMetaDataErrorCode.properties,/config/toft/ExchangeErrorCode.properties
+		</errorCodeConfigFileName>
+		<!-- action配置文件 -->
+		<actionConfigFileName>
+			config/toft/Action-config
+		</actionConfigFileName>
+	</file-config>
+
+	<class-config>
+
+		<checkSerialClass></checkSerialClass>
+		<servletConfigClass></servletConfigClass>
+	</class-config>
+
+	<!-- 扩展初始参数，具体应用在需要时可以使用 -->
+	<initParam key="author" value="toft group" desc="" />
+	<initParam key="version" value="2.5" desc="" />
+	<initParam key="dictionarypage"
+		value="config.dictionarys,config.iss.dictionarys,config.demoDictionarys"
+		desc="字典文件的存放路径" />
+	<initParam key="bpm_file_path" value="config/jpdl" desc="" />
+	<initParam key="bpm_actor_class"
+		value="com.toft.bpm.approval.handler.ToftDefaultActorHandler" desc="" />
+	<initParam key="bpm_action_class"
+		value="com.toft.bpm.approval.handler.ToftDefaultActionHandler"
+		desc="" />
+	<initParam key="DataRefreshFlagInDB" value="false"
+		desc="字典数据刷新标志是否存在数据库里" />
+	<initParam key="isRunJob" value="true" desc="调度任务的开关"></initParam>
+</toft-config>

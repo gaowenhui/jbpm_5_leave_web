@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		
+		<!-- jdbc connection properties -->
+<!--		<property name="connection.provider_class">-->
+<!--			com.iss.sysframe.approval.HibernateConnectionProvider-->
+<!--		</property>-->
+		
+<!--		<property name="connection.provider_class">-->
+<!--			com.iss.draftoperation.workflow.jbpm4.provider.HibernateConnectionProvider-->
+<!--		</property>-->
+		
+		
+    	<property name="connection.provider_class">com.toft.core2.dao.hibernate.ToftHibernateProvider</property>
+		
+<!--		<property name="hibernate.connection.datasource">java:comp/env/jdbc/OracleDS</property>-->
+		
+<!--		<property name="hibernate.dialect">org.hibernate.dialect.DB2Dialect</property>-->
+
+<!--		<property name="hibernate.query.factory_class">org.hibernate.hql.classic.ClassicQueryTranslatorFactory</property>-->
+		
+		<!-- 
+		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+		<property name="hibernate.connection.url">jdbc:oracle:thin:@10.24.25.31:1521:orcl</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.OracleDialect</property>
+		<property name="hibernate.connection.username">pt4</property>
+		<property name="hibernate.connection.password">password</property>
+        -->
+        <!-- 
+        <property name="hibernate.connection.driver_class">com.ibm.db2.jcc.DB2Driver</property>
+		<property name="hibernate.connection.url">jdbc:db2://10.10.19.161:50000/wfserver</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.DB2Dialect</property>
+		<property name="hibernate.connection.username">wfuser</property>
+		<property name="hibernate.connection.password">wfuser</property>
+		<property name="hibernate.default_schema">wfuser</property> 
+		-->
+		
+		<!-- 
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:6540/jbpm?useUnicode=true&amp;characterEncoding=utf-8</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+		<property name="hibernate.connection.username">les</property>
+		<property name="hibernate.connection.password">mealship_les_201207</property>
+		<property name="hibernate.default_schema">jbpm</property> 
+		-->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+		<property name="hibernate.default_schema">jbpm</property>
+		
+		
+ 		<property name="hibernate.hbm2ddl.auto">none</property>
+		<property name="hibernate.format_sql">false</property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.jdbc.batch_size">0</property>
+		<property name="hibernate.jdbc.use_streams_for_binary">true</property>
+		<property name="hibernate.use_sql_comments">false</property>
+		
+		
+		<mapping resource="jbpm.repository.hbm.xml" />
+		<mapping resource="jbpm.execution.hbm.xml" />
+		<mapping resource="jbpm.history.hbm.xml" />
+		<mapping resource="jbpm.task.hbm.xml" />
+		<mapping resource="jbpm.identity.hbm.xml" />
+
+	</session-factory>
+</hibernate-configuration>

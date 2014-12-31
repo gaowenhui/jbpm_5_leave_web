@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="webapp-framework" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<description>开发平台</description>
+	<!-- filter -->
+	<!-- 核心的mvc接收器，其中mvc适用于filter而不是servlet -->
+	<filter>
+		<filter-name>toft</filter-name>
+		<filter-class>com.toft.core2.mvc.ToftFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>userNumber</param-name>
+			<param-value>`ubbuzbbuubclx</param-value>
+		</init-param>
+		<init-param>
+			<param-name>lisencePath</param-name>
+			<param-value>C:\</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>toft</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>toft</filter-name>
+		<url-pattern>*.ajax</url-pattern>
+	</filter-mapping>
+	<!-- 皮肤的过滤器，通过转换图片和样式文件的路径来处理皮肤的内容 -->
+	<filter>
+		<filter-name>spin</filter-name>
+		<filter-class>com.toft.core2.skin.SkinFilter</filter-class>
+		<init-param>
+			<param-name>serveStatic</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>serveStaticBrowserCache</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.css</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.gif</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.GIF</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.png</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.PNG</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.jpg</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.JPG</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>spin</filter-name>
+		<url-pattern>*.ico</url-pattern>
+	</filter-mapping>
+
+    	<!-- 审批流设计器 -->
+	<servlet>
+		<servlet-name>MessageBrokerServlet</servlet-name>
+		<servlet-class>flex.messaging.MessageBrokerServlet</servlet-class>
+		<init-param>
+			<param-name>services.configuration.file</param-name>
+			<param-value>/WEB-INF/flex/services-config.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MessageBrokerServlet</servlet-name>
+		<url-pattern>/messagebroker/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>FileDownloadServlet</servlet-name>
+		<servlet-class>com.toft.widgets.workflow.servlet.FileDownloadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FileDownloadServlet</servlet-name>
+		<url-pattern>/FileDownloadServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>FileUploadServlet</servlet-name>
+		<servlet-class>com.toft.widgets.workflow.servlet.FileUploadServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FileUploadServlet</servlet-name>
+		<url-pattern>/FileUploadServlet</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>FileUploadOverToOpenServlet</servlet-name>
+		<servlet-class>com.toft.widgets.workflow.servlet.FileUploadOverToOpenServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FileUploadOverToOpenServlet</servlet-name>
+		<url-pattern>/FileUploadOverToOpenServlet</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- 欢迎界面 -->
+	<welcome-file-list>
+		<welcome-file>login.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- 各种错误码定义 -->
+	<error-page>
+		<error-code>500</error-code>
+		<location>/view/error.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/view/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/view/403.jsp</location>
+	</error-page>
+	<!-- session的生命周期 -->
+	<session-config>
+		<session-timeout>45</session-timeout>
+	</session-config>
+
+</web-app>

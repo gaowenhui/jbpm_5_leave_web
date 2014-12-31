@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/SDC_V3/!svn/ver/38068/Src/workflow/trunk/jbpm4_1.2/workflow-web/WebContent/WEB-INF/flex
+END
+messaging-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/SDC_V3/!svn/ver/38068/Src/workflow/trunk/jbpm4_1.2/workflow-web/WebContent/WEB-INF/flex/messaging-config.xml
+END
+proxy-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/SDC_V3/!svn/ver/38068/Src/workflow/trunk/jbpm4_1.2/workflow-web/WebContent/WEB-INF/flex/proxy-config.xml
+END
+services-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/SDC_V3/!svn/ver/38068/Src/workflow/trunk/jbpm4_1.2/workflow-web/WebContent/WEB-INF/flex/services-config.xml
+END
+remoting-config.xml
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/SDC_V3/!svn/ver/38068/Src/workflow/trunk/jbpm4_1.2/workflow-web/WebContent/WEB-INF/flex/remoting-config.xml
+END

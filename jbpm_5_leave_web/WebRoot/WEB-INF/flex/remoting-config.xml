@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service id="remoting-service" class="flex.messaging.services.RemotingService">
+
+	<adapters>
+		<adapter-definition id="java-object"
+			class="flex.messaging.services.remoting.adapters.JavaAdapter"
+			default="true" />
+	</adapters>
+
+	<default-channels>
+		<channel ref="my-amf" />
+	</default-channels>
+	<destination id="flexService">
+		<properties>
+			<source>com.toft.bpm.designer.FlexService</source>
+		</properties>
+	</destination>
+	<destination id="flexWFDesignerService">
+		<properties>
+			<source>com.toft.widgets.workflow.FlexService</source>
+		</properties>
+	</destination>
+	<destination id="monitorFWService">
+		<properties>
+			<source>
+				com.toft.widgets.workflow.monitorFW.FlexService
+			</source>
+		</properties>
+	</destination>
+	<destination id="flexFormService">
+		<properties>
+			<source>com.toft.widgets.form.FlexService</source>
+		</properties>
+	</destination>
+</service>

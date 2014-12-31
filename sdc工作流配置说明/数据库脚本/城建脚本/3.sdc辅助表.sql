@@ -1,0 +1,60 @@
+
+
+DROP TABLE SYS_MESSAGE_SENDER_IMPLEMENT;
+DROP TABLE SYS_MESSAGE_TEMPLATE;
+
+
+
+/* 消息发送 */
+create table SYS_MESSAGE_SENDER_IMPLEMENT
+(
+  ID         VARCHAR(32) not null comment 'ID',
+  NAME       VARCHAR(50)          comment '名称',
+  CLASS      VARCHAR(200)         comment '消息发送实现类',
+  FLAG       VARCHAR(1) not null  comment '启用标志',
+  STATUS     VARCHAR(1)           comment '逻辑删除',
+  MODTIME    DATETIME             comment '修改时间',
+  MODIFIERID VARCHAR(32)          comment '修改人id',
+  COMMITERID VARCHAR(32)          comment '创建人id'
+)
+;
+alter table SYS_MESSAGE_SENDER_IMPLEMENT comment '消息发送实现类表';
+
+
+/* 消息模板 */
+CREATE TABLE SYS_MESSAGE_TEMPLATE(
+    ID VARCHAR(32) NOT NULL    comment '唯一标识',
+    CODE VARCHAR(32)           comment '消息模板编号',
+    NAME VARCHAR(50)           comment '消息实现类名称',
+    TITLE VARCHAR(100)         comment '动态消息TITLE',
+    TEXT VARCHAR(500)          comment '动态消息TEXt',
+    FLAG CHAR(1) NOT NULL      comment '状态标识',
+    STATUS CHAR(1)             comment '是否删除',
+    MODTIME DATETIME           comment '操作时间',
+    MODIFIERID VARCHAR(32)     comment '操作人ID',
+    COMMITERID VARCHAR(32)     comment '创建人ID'
+);
+
+
+alter table SYS_MESSAGE_TEMPLATE COMMENT '工作流动态消息模板';
+
+
+/* 邮件功能 */
+insert into sys_message_sender_implement (ID, NAME, CLASS, FLAG, STATUS, MODTIME, MODIFIERID, COMMITERID)
+values ('00000000000000000001280997671618', '邮件', 'com.toft.widgets.sys.workflow.message.messagesender.MessageSenderJavaMailImpl', '1', '1', str_to_date('12-03-2010 11:22:51', '%d-%m-%Y %H:%i:%s'), '0000', '0000');
+
+/* 模板 */
+insert into sys_message_template (ID, CODE, NAME, TITLE, TEXT, FLAG, STATUS, MODTIME, MODIFIERID, COMMITERID)
+values ('1', '001', '模板1', '请审批', '您收到据号:{businessSN},业务类型:{businessName};    单据据金额:￥{money};请您尽快审批!', '1', '1', str_to_date('12-03-2010 11:22:51', '%d-%m-%Y %H:%i:%s'), '0001', '1');
+
+
+CREATE TABLE `jbpm4_demo_test` (
+  `ID` varchar(32) NOT NULL,
+  `PROCESSID` varchar(32) DEFAULT NULL COMMENT '流程ID',
+  `NAME` varchar(255) DEFAULT NULL COMMENT '编码',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '名称',
+  `NOTE` varchar(255) DEFAULT NULL COMMENT '备注',
+  `ISSTATUS` varchar(32) DEFAULT NULL COMMENT '状态',
+  `PROCESSDEFINITIONCODE` varchar(32) DEFAULT NULL COMMENT '流程模版CODE',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

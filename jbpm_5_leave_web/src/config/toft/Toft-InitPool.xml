@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+表定义池的包路径配置，即表定义XML文件的路径定义
+共享表的配置，即通过表名，访问其他路径下实现的表定义XML文件
+-->
+<config>
+	<init>
+		<class>
+          com.toft.core2.dao.init.UserControl
+        </class>
+	</init>
+<!--	<init>-->
+<!--		<class>-->
+<!--          com.toft.ext2.lisence.LicenseInit-->
+<!--        </class>-->
+<!--	</init>-->
+<!--	<init>-->
+<!--		<class>-->
+<!--           com.toft.ext2.quartz.QuartzInit-->
+<!--        </class>-->
+<!--	</init>-->
+	<init>
+		<class>
+			com.toft.core2.dao.init.MultiAccountInit
+		</class>
+	</init>
+	<init>
+		<class>
+          com.toft.core2.dao.init.SqlMapConfig
+        </class>
+	</init>
+</config>

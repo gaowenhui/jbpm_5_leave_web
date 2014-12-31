@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<components>
+    <import resource="classpath*:config/toft/module-struts2plugin.xml"/>
+    <constant name="useIBatis" value="classpath:config/sqlmap-config.xml" />
+    <component-scan package="com.toft.*,com.iss" />
+
+    <datasources transaction-manager="local">
+        <datasource id="1" name="应用数据库" type="Mysql">
+        
+            <connection user-name="root" password="root" server-name="127.0.0.1" max-size="50" min-size="10" port="3306" db-name="jbpm?useUnicode=true&amp;characterEncoding=utf-8">
+            </connection>
+        </datasource> 
+        <!--
+        <datasource id="1" name="应用数据库" type="Oracle">
+            <connection user-name="demo_sdc" password="password" server-name="10.24.16.67" port="1521" db-name="support">
+            </connection>
+        </datasource>
+        -->
+        <!--
+        <datasource id="1" name="应用数据库" type="Oracle">
+            <connection user-name="wf3" password="password" server-name="10.24.16.67" port="1521" db-name="orcl" max-size="150" min-size="100">
+            </connection>
+        </datasource>
+        -->
+    </datasources>
+    <listener class="com.toft.core3.biz.module.ModuleListener" />
+    <message resource="config.toft.ToftErrorCode"/>
+    <message resource="config.toft.ToftSYSErrorCode"/>
+</components>
